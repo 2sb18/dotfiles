@@ -3,4 +3,15 @@
 loadplugins '\.(js|penta)$'
 group user
 
+
+" taken from Rizal Almashoor {{{
+set hintkeys=sadfjklewcmpgh
+highlight -a Hint padding: 0 2px 0 1px; text-transform: lowercase; background-color: yellow; font: bold 14px "Droid Sans Mono";
+highlight -a HintElem background-color: transparent;
+
+" tab numbering
+set go+=n
+" }}}
+
+
 " vim: set ft=pentadactyl:
