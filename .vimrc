@@ -44,13 +44,15 @@ if s:is_windows
   set runtimepath+=$HOME\vimfiles\bundle\vundle
   call vundle#begin('~\vimfiles\bundle')
 else
-  set runtimepath+=~/Dropbox/Personal/home/vimfiles/bundle/vundle
-  call vundle#begin('~/Dropbox/Personal/home/vimfiles/bundle')
+  set runtimepath+=~/.vim/bundle/Vundle.vim
+  call vundle#begin()
 endif
 
 " Must haves
 
+" let Vundle manage Vundle
 Bundle 'gmarik/vundle'
+
 Bundle 'bling/vim-airline'
 Bundle 'scrooloose/nerdtree'
 " gotta switch back to scrooloose/syntastic after I've done my thing
@@ -590,7 +592,7 @@ command! ConqueRacket call s:ConqueRacket()
 " }}}
 " syntastic {{{
 
-let g:syntastic_debug = 1
+let g:syntastic_debug = 0
 let g:syntastic_aggregate_errors=1
 let g:syntastic_c_checkers=['gcc', 'pc_lint']
 let g:syntastic_c_compiler_options = '-std=gnu99 -Wall'
