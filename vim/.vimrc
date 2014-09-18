@@ -41,6 +41,7 @@ endif
 
 
 if s:is_windows
+  " for vundle
   set runtimepath+=$HOME\vimfiles\bundle\vundle
   call vundle#begin('~\vimfiles\bundle')
 else
@@ -56,7 +57,7 @@ Bundle 'gmarik/vundle'
 Bundle 'bling/vim-airline'
 Bundle 'scrooloose/nerdtree'
 " gotta switch back to scrooloose/syntastic after I've done my thing
-Bundle '2sb18/syntastic'
+Bundle 'scrooloose/syntastic'
 Bundle 'tomtom/tcomment_vim'
 Bundle 'Chiel92/vim-autoformat'
 Bundle 'jlanzarotta/bufexplorer'
@@ -594,7 +595,7 @@ command! ConqueRacket call s:ConqueRacket()
 
 let g:syntastic_debug = 0
 let g:syntastic_aggregate_errors=1
-let g:syntastic_c_checkers=['gcc', 'pc_lint']
+let g:syntastic_c_checkers=['pc_lint']
 let g:syntastic_c_compiler_options = '-std=gnu99 -Wall'
 let g:syntastic_html_checkers = ['validator']
 let g:syntastic_javascript_checkers=['jshint']

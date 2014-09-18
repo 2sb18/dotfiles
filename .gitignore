@@ -1,0 +1,4 @@
+/vim/.vim/bundle
+
+# don't ignore these files
+!/vim/.vim/bundle/vundle

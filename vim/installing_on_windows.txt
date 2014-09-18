@@ -1,0 +1,4 @@
+put a symbolic link from %USERPROFILE%\vimfiles\ to dotfiles\vim\.vim
+
+also do this into the .vim/bundle folder:
+git clone https://github.com/gmarik/vundle 
