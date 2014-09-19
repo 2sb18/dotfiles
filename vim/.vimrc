@@ -31,6 +31,9 @@ filetype off
 if has("win32") || has("win16")
   let s:is_windows=1
   let s:term_command='cmd'
+  " for windows
+  let $TMP=$HOME.'\temp'
+  let $TEMP=$HOME.'\temp'
 else
   let s:is_windows=0
   let s:term_command='bash'
@@ -114,7 +117,7 @@ filetype plugin indent on
 " Environments (GUI, Console, Fonts ) --------------------- {{{
 
 if s:is_windows
-  set guifont=DejaVu_Sans_Mono_for_Powerline:h11:cANSI
+  set guifont=DejaVu_Sans_Mono_for_Powerline:h10:cANSI
 else 
   set gfn=Droid\ Sans\ Mono\ for\ Powerline\ 11
 endif
@@ -457,10 +460,10 @@ let g:formatprg_args_javascript="--indent-size 2 --file -"
 augroup ft_c
   au!
   " au FileType c setlocal 
-  " au FileType c setlocal foldmethod=indent foldlevel=1 foldclose=all
+  au FileType c setlocal foldmethod=indent foldnestmax=1 
   " au FileType c setlocal colorcolumn=85
   " if !s:is_windows
-    au BufWrite *.c :Autoformat
+  au BufWrite *.c :Autoformat
   " endif
 
 augroup END
@@ -491,6 +494,7 @@ augroup END
 " Vim {{{
 augroup ft_vim
   au!
+  au BufWrite *.vim :Autoformat
   " vim help files have filetype 'help'
   au FileType vim,help setlocal number!
 augroup END
@@ -648,7 +652,7 @@ endfunction " }}}
 command! -nargs=0 Pulse call s:Pulse()
 " }}}
 " ConqueGdb {{{
-    let g:ConqueGdb_Leader = ',,'
+let g:ConqueGdb_Leader = ',,'
 " }}}
 
 " REMAPS -------------------------------------------------- {{{
