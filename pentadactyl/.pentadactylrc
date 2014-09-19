@@ -13,5 +13,11 @@ highlight -a HintElem background-color: transparent;
 set go+=n
 " }}}
 
+" Gmail shortcuts should work
+" taken from https://mail.google.com/mail/u/0/?pli=1#inbox
+set passkeys+=mail.google.com:'!#*+-./<C-Down><C-s><Enter>?INU[]acefjk lmnopqrsuvxyz',*a,*n,*r,*s,*t,*u,ga,gc,gd,gi,gl,gs,gt,yo
+set strictfocus+=mail.google.com:laissez-faire
+" }}}
+
 
 " vim: set ft=pentadactyl:
