@@ -46,7 +46,7 @@ if s:is_windows
   set runtimepath+=$HOME\vimfiles\bundle\vundle
   call vundle#begin('~\vimfiles\bundle')
 else
-  set runtimepath+=~/.vim/bundle/Vundle.vim
+  set runtimepath+=~/.vim/bundle/vundle
   call vundle#begin()
 endif
 
