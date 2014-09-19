@@ -31,6 +31,9 @@ filetype off
 if has("win32") || has("win16")
   let s:is_windows=1
   let s:term_command='cmd'
+  " for windows
+  let $TMP=$HOME.'\temp'
+  let $TEMP=$HOME.'\temp'
 else
   let s:is_windows=0
   let s:term_command='bash'
