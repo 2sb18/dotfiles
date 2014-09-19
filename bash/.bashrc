@@ -135,3 +135,6 @@ cd ..
 . ~/bin/carpe-diem.sh
 carpe-diem
 
+if [ "$TERM" == "xterm" ]: then
+  export TERM=xterm-256color
+fi

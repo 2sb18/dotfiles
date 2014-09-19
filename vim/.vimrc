@@ -34,6 +34,7 @@ if has("win32") || has("win16")
 else
   let s:is_windows=0
   let s:term_command='bash'
+  set shell=/bin/bash
 endif
 " }}}
 " Vundle - ------------------------------------------------ {{{
@@ -71,6 +72,9 @@ Bundle 'tpope/vim-fugitive'
 Bundle 'skwp/greplace.vim'
 " full path fuzzy file, buffer, mru, tag, ... finder for vim
 Bundle 'kien/ctrlp.vim'
+
+" make gvim-only colorschemes work transparently in terminal vim
+Bundle 'godlygeek/csapprox'
 
 " not working well for me. should have more manual
 " control over tagging
@@ -524,6 +528,7 @@ augroup END
 let NERDTreeShowBookmarks = 1
 let NERDTreeMinimalUI = 1
 let NERDChristmasTree = 1
+let NERDTreeShowHidden = 1
 " }}}
 " slimv {{{
 
