@@ -1,2 +1,0 @@
-put a symbolic link from %USERPROFILE%\vimfiles\ to dotfiles\vim\.vim
- 
