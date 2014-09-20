@@ -10,7 +10,7 @@
 " Tagging - ctags, autotag, and autoproto (maybe Super Tab)
 " Debugging - vdebug for some stuff (PHP)
 " Linting (optional) - syntastic + linting program
-" Versioning - Fugitive for Git and Lawercium for Mercurial
+" Versioning - Fugitive git-gutter for Git and Lawercium for Mercurial
 
 " Global searching/replacing - Greplace
 "
@@ -79,6 +79,9 @@ Bundle 'kien/ctrlp.vim'
 " make gvim-only colorschemes work transparently in terminal vim
 Bundle 'godlygeek/csapprox'
 
+" show changes to the file since last commit
+Bundle 'mhinz/vim-signify'
+
 " not working well for me. should have more manual
 " control over tagging
 " Bundle 'vim-scripts/AutoTag'
@@ -105,7 +108,6 @@ Bundle 'vim-scripts/Conque-GDB'
 " vim-clojure
 " vim-dispatch
 " vim-fireplace
-" vim-fugitive
 " vim-racket
 
 " a - alternate files quickly .c --> .h
@@ -122,7 +124,11 @@ else
   set gfn=Droid\ Sans\ Mono\ for\ Powerline\ 11
 endif
 
-colorscheme molokai
+if !s:is_windows && system("uname -a | grep raspberrypi") != ""
+  colorscheme default
+else
+  colorscheme molokai
+endif
 
 " make comments brighter
 hi Comment guifg=#C8C8C8
@@ -228,7 +234,6 @@ if !s:is_windows
 endif
 " }}}
 " Convenience Mappings ------------------------------------ {{{
-
 " Non-Leader Mappings {{{ 
 " gj moves down screen lines instead of file lines
 nnoremap j gj
@@ -352,11 +357,6 @@ nnoremap <leader>cd :cd %:h<cr>
 nnoremap <leader>cs :ConqueStart<cr>
 " nnoremap <leader>d :DiffSaved<cr>
 nnoremap <leader>d :bp<cr>
-" nnoremap <leader>et :tabe $MYVIMRC<cr>
-nnoremap <leader>ev :vs $MYVIMRC<cr>
-nnoremap <leader>es :w<cr>:let b:vimrc_wd = getcwd()<cr>:so $MYVIMRC<cr>:exe "cd " . b:vimrc_wd<cr>:bd<cr>
-" reload vimrc but don't close it
-nnoremap <leader>er :w<cr>:let vimrc_wd = getcwd()<cr>:so $MYVIMRC<cr>:exe "cd " . vimrc_wd<cr>
 " open an explorer window for the pwd
 nnoremap <leader>ex :execute "!start explorer" getcwd()<cr>
 " open an explorer window for the bundle directory
@@ -366,10 +366,14 @@ nnoremap <leader>ex :execute "!start explorer" getcwd()<cr>
 nnoremap <leader>f :bn<cr>
 nnoremap <leader>g :GundoToggle<cr>
 
-
+" for some reason these have to be nmaps!
+nmap <leader>j <plug>(signify-next-hunk)
+nmap <leader>k <plug>(signify-prev-hunk)
 
 "for linting
-nnoremap <leader>l :cd %:h<cr>:silent !lint.bat<cr>:cf lint_errors.txt<cr>
+" don't need any more since we're using syntastic. actually, maybe in would be
+" cool for linting across a whole project
+" nnoremap <leader>l :cd %:h<cr>:silent !lint.bat<cr>:cf lint_errors.txt<cr>
 "
 " m for mark. easily create bookmarks in NERDTree
 nnoremap <leader>m :exe "Bookmark " . substitute( matchstr( getline("."), '-\=\<.*' ), ' ', '_', '' )<cr>
@@ -381,21 +385,26 @@ nmap <leader>P <Plug>yankstack_substitute_newer_paste
 " recently opened files
 nnoremap <leader>r :CtrlPMRU<cr>
 
-
 " replace all words in a file
 nnoremap <leader>s :%s/\<<C-r><C-w>\>/
+
 if !s:is_windows
   nnoremap <leader>tm :call VimuxRunCommand("clear;")<cr>
 endif
+
+nnoremap <leader>vv :e $MYVIMRC<cr>
+nnoremap <leader>vs :w<cr>:let b:vimrc_wd = getcwd()<cr>:so $MYVIMRC<cr>:exe "cd " . b:vimrc_wd<cr>:bd<cr>
+" reload vimrc but don't close it
+nnoremap <leader>vr :w<cr>:let vimrc_wd = getcwd()<cr>:so $MYVIMRC<cr>:exe "cd " . vimrc_wd<cr>
+
 nnoremap <leader>w <C-w>v<C-w>l
+" delete buffer, leave window open
 nnoremap <leader>x :BD<cr>
+" delete buffer and close window
 nnoremap <leader>z :BD<cr><C-w>c
 nnoremap <leader><space> :noh<cr>
-" crappy solution but kinda works!
-nnoremap <leader>rows :normal i select table_name, table_rows from information_schema.tables where table_schema = (select database());
 
 " }}}
-
 " }}}
 " Folding ------------------------------------------------- {{{
 
