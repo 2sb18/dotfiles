@@ -125,7 +125,7 @@ else
 endif
 
 if !s:is_windows && system("uname -a | grep raspberrypi") != ""
-  colorscheme default
+  colorscheme jellybeans
 else
   colorscheme molokai
 endif
