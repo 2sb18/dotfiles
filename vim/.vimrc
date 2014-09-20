@@ -144,10 +144,13 @@ set guicursor+=i:ver100-iCursor
 set guicursor+=n-v-c:blinkon0
 
 " make it so all swap files go to temp directory
-
 " the ! on the silent silences errors, this error being
 " that the temp directory already exists
-silent! execute '!mkdir "'.$HOME.'/temp"'
+if s:is_windows
+  silent! execute '!mkdir "'.$HOME.'/temp"'
+else 
+  silent execute '!mkdir -p "'.$HOME.'/temp"'
+endif
 set backupdir=$HOME/temp//
 set directory=$HOME/temp//
 set undodir=$HOME/temp//
