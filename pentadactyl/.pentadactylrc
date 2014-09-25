@@ -4,14 +4,14 @@ loadplugins '\.(js|penta)$'
 group user
 
 
-" taken from Rizal Almashoor {{{
-set hintkeys=sadfjklewcmpgh
+" taken from Rizal Almashoor
+set hintkeys=qwertyuiopasdfghjklzxcvbnm
 highlight -a Hint padding: 0 2px 0 1px; text-transform: lowercase; background-color: yellow; font: bold 14px "Droid Sans Mono";
 highlight -a HintElem background-color: transparent;
 
 " tab numbering
 set go+=n
-" }}}
+" end of "taken from Rizal Almashoor"
 
 " Gmail shortcuts should work
 " taken from https://mail.google.com/mail/u/0/?pli=1#inbox
