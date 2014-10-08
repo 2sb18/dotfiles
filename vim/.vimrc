@@ -396,9 +396,12 @@ if !s:is_windows
 endif
 
 nnoremap <leader>vv :e $MYVIMRC<cr>
-nnoremap <leader>vs :w<cr>:let b:vimrc_wd = getcwd()<cr>:so $MYVIMRC<cr>:exe "cd " . b:vimrc_wd<cr>:bd<cr>
+" nnoremap <leader>vs :w<cr>:let b:vimrc_wd = getcwd()<cr>:so $MYVIMRC<cr>:exe "cd " . b:vimrc_wd<cr>:bd<cr>
+" don't think I need to save directory before sourcing
+nnoremap <leader>vs :w<cr>:so $MYVIMRC<cr>:bd<cr>
 " reload vimrc but don't close it
-nnoremap <leader>vr :w<cr>:let vimrc_wd = getcwd()<cr>:so $MYVIMRC<cr>:exe "cd " . vimrc_wd<cr>
+" nnoremap <leader>vr :w<cr>:let vimrc_wd = getcwd()<cr>:so $MYVIMRC<cr>:exe "cd " . vimrc_wd<cr>
+nnoremap <leader>vr :w<cr>:so $MYVIMRC<cr>
 
 nnoremap <leader>w <C-w>v<C-w>l
 " delete buffer, leave window open

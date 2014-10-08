@@ -116,6 +116,9 @@ alias cheatsheet="less ~/cheat_sheet.org.sh"
 # add my user bin to the lookup
 export PATH=~/bin:"$PATH"
 
+# add the scripts in dotfiles/scripts to lookup
+export PATH=~/dotfiles/scripts:"$PATH"
+
 # prints a line.
 # call like this: pl line_number file
 # create a function called pl
@@ -132,7 +135,7 @@ cd ~/.dropbox-dist
 ./dropbox
 cd ..
 
-. ~/bin/carpe-diem.sh
+. ~/dotfiles/scripts/carpe-diem.sh
 carpe-diem
 
 if [ "$TERM" == "xterm" ]: then
