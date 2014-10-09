@@ -237,7 +237,7 @@ if !s:is_windows
 endif
 " }}}
 " Convenience Mappings ------------------------------------ {{{
-" Non-Leader Mappings {{{ 
+"   Non-Leader Mappings {{{ 
 " gj moves down screen lines instead of file lines
 nnoremap j gj
 nnoremap k gk
@@ -333,7 +333,7 @@ function! ExecuteMacroOverVisualRange()
 endfunction
 
 " }}}
-" Leader Mappings {{{
+"   Leader Mappings {{{
 
 let mapleader = ","
 
@@ -362,9 +362,11 @@ nnoremap <leader>cs :ConqueStart<cr>
 nnoremap <leader>d :bp<cr>
 " open an explorer window for the pwd
 nnoremap <leader>ex :execute "!start explorer" getcwd()<cr>
-" open an explorer window for the bundle directory
-" echo fnamemodify($MYVIMRC, ":h") . "\\vimfiles\\bundle"
-" nnoremap <leader>ee :execute "!start explorer fnamemodify($MYVIMRC, \":h\") . \"\\vimfiles\\bundle\""
+" open a cmd window in the pwd
+if s:is_windows
+  nnoremap <leader>ec :execute '!start cmd /K "cd /d ' getcwd() '"'<cr>
+endif
+
 " switching quickly between open buffers
 nnoremap <leader>f :bn<cr>
 nnoremap <leader>g :GundoToggle<cr>
@@ -396,9 +398,9 @@ if !s:is_windows
 endif
 
 nnoremap <leader>vv :e $MYVIMRC<cr>
-nnoremap <leader>vs :w<cr>:let b:vimrc_wd = getcwd()<cr>:so $MYVIMRC<cr>:exe "cd " . b:vimrc_wd<cr>:bd<cr>
-" reload vimrc but don't close it
-nnoremap <leader>vr :w<cr>:let vimrc_wd = getcwd()<cr>:so $MYVIMRC<cr>:exe "cd " . vimrc_wd<cr>
+" save and reload vimrc
+" nnoremap <leader>vs :w<cr>et b:vimrc_wd = getcwd()<cr>:so $MYVIMRC<cr>:exe "cd " . b:vimrc_wd<cr>:bd<cr>
+nnoremap <leader>vs :w<cr>:so $MYVIMRC<cr>
 
 nnoremap <leader>w <C-w>v<C-w>l
 " delete buffer, leave window open
@@ -448,7 +450,7 @@ set foldtext=MyFoldText()
 
 " }}}
 " Filetype-specific --------------------------------------- {{{
-" PHP {{{
+"   PHP {{{
 augroup ft_php
   au!
   au FileType php setlocal foldnestmax=1
@@ -457,7 +459,7 @@ augroup ft_php
 augroup END
 
 " }}}
-" Javascript {{{
+"   Javascript {{{
 augroup ft_javascript
   au!
   au BufWrite *.js :Autoformat
@@ -468,7 +470,7 @@ let g:formatprg_args_javascript="--indent-size 2 --file -"
 
 
 " }}}
-" C {{{
+"   C {{{
 augroup ft_c
   au!
   " au FileType c setlocal 
@@ -485,11 +487,10 @@ augroup END
 " indent classes, switches, namespaces
 " pad operators, parenthesis
 " keep one line statements
-let g:formatprg_c = "astyle"
-let g:formatprg_args_c = "--indent=spaces=2 --style=java --indent-classes --indent-switches --indent-namespaces --pad-oper --pad-paren --keep-one-line-statements"
-
+let g:formatprg_c="astyle"
+let g:formatprg_args_c="--indent=spaces=2 --style=java --indent-classes --indent-switches --indent-namespaces --pad-oper --pad-paren --keep-one-line-statements"
 " }}}
-" Racket {{{
+"   Racket {{{
 augroup ft_racket
   au!
   au BufWrite *.rkt :Autoformat
@@ -503,7 +504,7 @@ augroup ft_racket
   au FileType racket :RainbowParenthesesLoadBraces
 augroup END  
 " }}}
-" Vim {{{
+"   Vim {{{
 augroup ft_vim
   au!
   au BufWrite *.vim :Autoformat
@@ -511,7 +512,7 @@ augroup ft_vim
   au FileType vim,help setlocal number!
 augroup END
 " }}}
-" HTML {{{
+"   HTML {{{
 augroup ft_html
   au!
   au FileType html setlocal spell spelllang=en_us
@@ -519,19 +520,19 @@ augroup ft_html
 augroup END
 "
 " }}}
-" text {{{
+"   text {{{
 augroup ft_text
   au!
   au FileType text setlocal spell spelllang=en_us
 augroup END
 " }}}
-" tags {{{
+"   tags {{{
 augroup ft_tags
   au!
   au BufRead,BufNewfile *.mptags setlocal filetype=tags
 augroup END
 " }}}
-" Markdown {{{
+"   Markdown {{{
 augroup ft_markdown
   au!
   au BufRead,BufNewFile *.md setlocal filetype=markdown
@@ -539,13 +540,13 @@ augroup END
 " }}}
 " }}}
 " Plugin settings ----------------------------------------- {{{
-" NERDTree {{{
+"   NERDTree {{{
 let NERDTreeShowBookmarks = 1
 let NERDTreeMinimalUI = 1
 let NERDChristmasTree = 1
 let NERDTreeShowHidden = 1
 " }}}
-" slimv {{{
+"   slimv {{{
 
 let g:slimv_preferred = 'mit'
 
@@ -555,17 +556,17 @@ let g:slimv_swank_cmd = '!start mit-scheme --band C:\MIT-Scheme\lib\all.com --li
 let g:slimv_leader = '\'
 
 " }}}
-" ctrlp {{{
+"   ctrlp {{{
 let g:ctrlp_cache_dir = $TEMP.'/.cache/ctrlp'
 let g:ctrlp_match_window = 'max:30'
 " }}}
-" bufExplorer {{{
+"   bufExplorer {{{
 let g:bufExplorerShowNoName=1
 "let g:bufExplorerShowUnlisted=1
 let g:bufExplorerSplitRight=1
 let g:bufExplorerFindActive=0        " Do not go to active window.
 " }}}
-" ConqueTerm {{{
+"   ConqueTerm {{{
 let g:ConqueTerm_ReadUnfocused = 1
 
 function! ConqueWriteAndWait( to_write, search_pattern )
@@ -612,7 +613,7 @@ function! s:ConqueRacket()
 endfunction
 command! ConqueRacket call s:ConqueRacket()
 " }}}
-" syntastic {{{
+"   syntastic {{{
 
 let g:syntastic_debug = 0
 let g:syntastic_aggregate_errors=1
@@ -626,15 +627,14 @@ let g:syntastic_php_checkers=['php', 'phpcs', 'phpmd']
 " let g:syntastic_racket_checkers=['racket']
 
 " }}}
-" Airline {{{
+"   Airline {{{
 
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
 let g:airline_powerline_fonts=1
 
 " }}}
-" Pulse Line {{{
-
+"   Pulse Line {{{
 function! s:Pulse() " {{{
   redir => old_hi
   silent execute 'hi CursorLine'
@@ -663,10 +663,13 @@ function! s:Pulse() " {{{
 endfunction " }}}
 command! -nargs=0 Pulse call s:Pulse()
 " }}}
-" ConqueGdb {{{
+"   ConqueGdb {{{
 let g:ConqueGdb_Leader = ',,'
 " }}}
-
+"   signify {{{
+let g:signify_vcs_list = [ 'hg', 'git' ]
+"   }}}
+" }}}
 " REMAPS -------------------------------------------------- {{{
 
 " function defines new function
@@ -738,8 +741,6 @@ function! s:CTags()
 endfunction
 command! CTags call s:CTags()
 
-
-" }}}
 
 " }}}
 " Disorganized Crap --------------------------------------- {{{
