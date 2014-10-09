@@ -7,16 +7,16 @@
 " Autocompiling - syntastic
 " Autocomplete - Super Tab
 " Unit Testing - Dispatch. raco for racket
-" Tagging - ctags, autotag, and autoproto (maybe Super Tab)
+" Tagging - ctags, autotag, and autoproto
 " Debugging - vdebug for some stuff (PHP)
 " Linting (optional) - syntastic + linting program
-" Versioning - Fugitive git-gutter for Git and Lawercium for Mercurial
+" Versioning - Fugitive for Git and Lawercium for Mercurial. vim-signify to 
+"              see changes in the gutter
 
 " Global searching/replacing - Greplace
 "
 " }}}   
 " things to learn/fix in vim ------------------------------ {{{
-" - install the plugin alternate
 " - install Cscope
 " - Ack!!!!
 " - find a better changelist plugin, one that works across files
@@ -86,6 +86,24 @@ Bundle 'mhinz/vim-signify'
 " control over tagging
 " Bundle 'vim-scripts/AutoTag'
 
+" snipmate stuff 
+"snipmate depends on this
+Bundle "MarcWeber/vim-addon-mw-utils"
+"snipmate depends on this
+Bundle "tomtom/tlib_vim"
+Bundle "garbas/vim-snipmate"
+"snipmate doesn't ship with snippets, so these are some snippets
+Bundle "honza/vim-snippets"     
+
+" vim-misc is needed for easytags
+Bundle "xolox/vim-misc"
+Bundle "xolox/vim-easytags"
+
+"show the proto in the preview window for C
+Bundle "vim-scripts/autoproto.vim"
+
+" tab completion when searching (might kinda suck)
+Bundle 'vim-scripts/SearchComplete'
 
 " Language specific
 Bundle 'maksimr/vim-jsbeautify'
@@ -540,13 +558,13 @@ augroup END
 " }}}
 " }}}
 " Plugin settings ----------------------------------------- {{{
-" NERDTree {{{
+"   NERDTree {{{
 let NERDTreeShowBookmarks = 1
 let NERDTreeMinimalUI = 1
 let NERDChristmasTree = 1
 let NERDTreeShowHidden = 1
 " }}}
-" slimv {{{
+"   slimv {{{
 
 let g:slimv_preferred = 'mit'
 
@@ -556,17 +574,17 @@ let g:slimv_swank_cmd = '!start mit-scheme --band C:\MIT-Scheme\lib\all.com --li
 let g:slimv_leader = '\'
 
 " }}}
-" ctrlp {{{
+"   ctrlp {{{
 let g:ctrlp_cache_dir = $TEMP.'/.cache/ctrlp'
 let g:ctrlp_match_window = 'max:30'
 " }}}
-" bufExplorer {{{
+"   bufExplorer {{{
 let g:bufExplorerShowNoName=1
 "let g:bufExplorerShowUnlisted=1
 let g:bufExplorerSplitRight=1
 let g:bufExplorerFindActive=0        " Do not go to active window.
 " }}}
-" ConqueTerm {{{
+"   ConqueTerm {{{
 let g:ConqueTerm_ReadUnfocused = 1
 
 function! ConqueWriteAndWait( to_write, search_pattern )
@@ -613,7 +631,7 @@ function! s:ConqueRacket()
 endfunction
 command! ConqueRacket call s:ConqueRacket()
 " }}}
-" syntastic {{{
+"   syntastic {{{
 
 let g:syntastic_debug = 0
 let g:syntastic_aggregate_errors=1
@@ -627,14 +645,14 @@ let g:syntastic_php_checkers=['php', 'phpcs', 'phpmd']
 " let g:syntastic_racket_checkers=['racket']
 
 " }}}
-" Airline {{{
+"   Airline {{{
 
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
 let g:airline_powerline_fonts=1
 
 " }}}
-" Pulse Line {{{
+"   Pulse Line {{{
 
 function! s:Pulse() " {{{
   redir => old_hi
@@ -664,10 +682,13 @@ function! s:Pulse() " {{{
 endfunction " }}}
 command! -nargs=0 Pulse call s:Pulse()
 " }}}
-" ConqueGdb {{{
+"   ConqueGdb {{{
 let g:ConqueGdb_Leader = ',,'
 " }}}
-
+"   EasyTags {{{
+      :let g:easytags_dynamic_files = 1
+      :let g:easytags_async = 1
+" }}}
 " REMAPS -------------------------------------------------- {{{
 
 " function defines new function
