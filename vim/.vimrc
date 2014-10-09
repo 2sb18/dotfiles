@@ -1,6 +1,20 @@
 " got a bunch of stuff from Steve Losh's vimrc
 "
 "
+" Problems ------------------------------------------------ {{{
+"   :1,$!astyle (called by :Autoformat) an empty c file results in a 0x01 being written
+"   :Autoformat a c file results in crlf being added
+"     - seems to be astyle, since it only happens with c files
+"       - does it happen with h files? yes it does
+"     - line always put after the last line filters.
+"       - ex. :1,184!astyle puts a line after line 184
+"     - has to do with filtering, look at :help filter
+"     - def a problem with astyle, check out:
+"       http://sourceforge.net/p/astyle/bugs/305/
+"       - problem with astyle 2.04
+"       - it's fixed in the repository, going to wait till it's
+"         fixed in a release version.
+" }}}   
 " Ideal Coding Setup -------------------------------------- {{{
 
 " Autoformatting - autoformat
@@ -494,6 +508,7 @@ augroup ft_c
   " au FileType c setlocal colorcolumn=85
   " if !s:is_windows
   au BufWrite *.c :Autoformat
+  au BufWrite *.h :Autoformat
   " endif
 
 augroup END
@@ -504,7 +519,11 @@ augroup END
 " pad operators, parenthesis
 " keep one line statements
 let g:formatprg_c="astyle"
-let g:formatprg_args_c="--indent=spaces=2 --style=java --indent-classes --indent-switches --indent-namespaces --pad-oper --pad-paren --keep-one-line-statements"
+let g:formatprg_h="astyle"
+let s:astyle_format="--indent=spaces=2 --style=attach --indent-classes --indent-switches --indent-namespaces --pad-oper --pad-paren --keep-one-line-statements"
+let g:formatprg_args_c=s:astyle_format
+let g:formatprg_args_h=s:astyle_format
+
 " }}}
 "   Racket {{{
 augroup ft_racket
@@ -685,10 +704,10 @@ let g:ConqueGdb_Leader = ',,'
 "   signify {{{
 let g:signify_vcs_list = [ 'hg', 'git' ]
 "   }}}
-" }}}
 "   EasyTags {{{
       let g:easytags_dynamic_files = 1
       let g:easytags_async = 1
+" }}}
 " }}}
 " REMAPS -------------------------------------------------- {{{
 
