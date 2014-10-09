@@ -7,16 +7,16 @@
 " Autocompiling - syntastic
 " Autocomplete - Super Tab
 " Unit Testing - Dispatch. raco for racket
-" Tagging - ctags, autotag, and autoproto (maybe Super Tab)
+" Tagging - ctags, autotag, and autoproto
 " Debugging - vdebug for some stuff (PHP)
 " Linting (optional) - syntastic + linting program
-" Versioning - Fugitive git-gutter for Git and Lawercium for Mercurial
+" Versioning - Fugitive for Git and Lawercium for Mercurial. vim-signify to 
+"              see changes in the gutter
 
 " Global searching/replacing - Greplace
 "
 " }}}   
 " things to learn/fix in vim ------------------------------ {{{
-" - install the plugin alternate
 " - install Cscope
 " - Ack!!!!
 " - find a better changelist plugin, one that works across files
@@ -86,6 +86,24 @@ Bundle 'mhinz/vim-signify'
 " control over tagging
 " Bundle 'vim-scripts/AutoTag'
 
+" snipmate stuff 
+"snipmate depends on this
+Bundle "MarcWeber/vim-addon-mw-utils"
+"snipmate depends on this
+Bundle "tomtom/tlib_vim"
+Bundle "garbas/vim-snipmate"
+"snipmate doesn't ship with snippets, so these are some snippets
+Bundle "honza/vim-snippets"     
+
+" vim-misc is needed for easytags
+Bundle "xolox/vim-misc"
+Bundle "xolox/vim-easytags"
+
+"show the proto in the preview window for C
+Bundle "vim-scripts/autoproto.vim"
+
+" tab completion when searching (might kinda suck)
+Bundle 'vim-scripts/SearchComplete'
 
 " Language specific
 Bundle 'maksimr/vim-jsbeautify'
@@ -268,7 +286,8 @@ nnoremap <C-U> <C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y>
 nnoremap <C-D> <C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E>
 
 " make it easy to add lines above and below current line
-nnoremap <C-j> O<Esc>j<C-e>
+" because of the scrolloff option, <C-E> gets a little funky
+nnoremap <C-j> :let b:save_scrolloff = &scrolloff<cr>:set scrolloff=0<cr>O<Esc>j<C-E>:let &scrolloff = b:save_scrolloff<cr>
 " put space below the current line
 nnoremap <C-k> o<Esc>k
 
@@ -285,9 +304,6 @@ inoremap <c-z> <c-o>zz
 " open up a new tab with a ctrl-w thing
 nnoremap <c-w>t :tabnew<cr>
 
-" get rid of :clo mapping while I learn ctrl-w c
-" nnoremap :clo <nop>
-"
 " move around easier
 nnoremap } }zz
 nnoremap { {zz
@@ -669,6 +685,10 @@ let g:ConqueGdb_Leader = ',,'
 "   signify {{{
 let g:signify_vcs_list = [ 'hg', 'git' ]
 "   }}}
+" }}}
+"   EasyTags {{{
+      let g:easytags_dynamic_files = 1
+      let g:easytags_async = 1
 " }}}
 " REMAPS -------------------------------------------------- {{{
 
