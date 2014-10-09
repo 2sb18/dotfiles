@@ -268,7 +268,8 @@ nnoremap <C-U> <C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y>
 nnoremap <C-D> <C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E>
 
 " make it easy to add lines above and below current line
-nnoremap <C-j> O<Esc>j<C-e>
+" because of the scrolloff option, <C-E> gets a little funky
+nnoremap <C-j> :let b:save_scrolloff = &scrolloff<cr>:set scrolloff=0<cr>O<Esc>j<C-E>:let &scrolloff = b:save_scrolloff<cr>
 " put space below the current line
 nnoremap <C-k> o<Esc>k
 
@@ -285,9 +286,6 @@ inoremap <c-z> <c-o>zz
 " open up a new tab with a ctrl-w thing
 nnoremap <c-w>t :tabnew<cr>
 
-" get rid of :clo mapping while I learn ctrl-w c
-" nnoremap :clo <nop>
-"
 " move around easier
 nnoremap } }zz
 nnoremap { {zz
