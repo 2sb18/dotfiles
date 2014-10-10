@@ -487,13 +487,28 @@ let g:formatprg_args_javascript="--indent-size 2 --file -"
 
 " }}}
 "   C {{{
+function! s:RemoveExtraNewlines()
+  " had to write this cause of the bug with astyle
+
+  let save_cursor = getpos(".")
+  " with the !, mappings are not used
+  normal! G
+  while 1 < line(".") && 0 == strlen(getline(".")) 
+    normal! dd
+  endwhile
+  normal! o
+  call setpos('.', save_cursor)
+endfunction
+command! RemoveExtraNewlines call s:RemoveExtraNewlines()
+
 augroup ft_c
   au!
   " au FileType c setlocal 
   au FileType c setlocal foldmethod=indent foldnestmax=1 
   " au FileType c setlocal colorcolumn=85
   " if !s:is_windows
-  au BufWrite *.c :Autoformat
+  " au BufWrite *.c :Autoformat
+  au BufWrite *.c :RemoveExtraNewlines
   " endif
 
 augroup END
@@ -685,10 +700,10 @@ let g:ConqueGdb_Leader = ',,'
 "   signify {{{
 let g:signify_vcs_list = [ 'hg', 'git' ]
 "   }}}
-" }}}
 "   EasyTags {{{
       let g:easytags_dynamic_files = 1
       let g:easytags_async = 1
+" }}}
 " }}}
 " REMAPS -------------------------------------------------- {{{
 
@@ -760,8 +775,6 @@ function! s:CTags()
   endif
 endfunction
 command! CTags call s:CTags()
-
-
 " }}}
 " Disorganized Crap --------------------------------------- {{{
 
