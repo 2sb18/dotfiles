@@ -84,7 +84,10 @@ Bundle 'sjl/gundo.vim'
 Bundle 'ervandew/supertab'
 Bundle 'vim-scripts/matchit.zip'
 Bundle 'vim-scripts/bufkill.vim'
+" git commands
 Bundle 'tpope/vim-fugitive'
+" mercurial commands
+Bundle 'ludovicchabant/vim-lawrencium'
 " global search and replace
 Bundle 'skwp/greplace.vim'
 " full path fuzzy file, buffer, mru, tag, ... finder for vim
@@ -521,6 +524,7 @@ augroup ft_c
   au FileType c setlocal foldmethod=indent foldnestmax=1 
   " au FileType c setlocal colorcolumn=85
   " if !s:is_windows
+  au BufWrite *.c :Autoformat
   au BufWrite *.c :RemoveExtraNewlines
   au BufWrite *.h :Autoformat
   au BufWrite *.h :RemoveExtraNewlines
