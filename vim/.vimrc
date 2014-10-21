@@ -116,36 +116,9 @@ Bundle "honza/vim-snippets"
 Bundle "xolox/vim-misc"
 Bundle "xolox/vim-easytags"
 
-"show the proto in the preview window for C
-Bundle "vim-scripts/autoproto.vim"
-
-" tab completion when searching (might kinda suck)
-Bundle 'vim-scripts/SearchComplete'
-
 " Language specific
 Bundle 'maksimr/vim-jsbeautify'
 Bundle 'vim-scripts/Conque-GDB'
-
-
-" ack -
-" autoproto
-" bufkill
-" conque_2.3
-" ctrlp
-" greplace
-" lawrencium
-" rainbow_parentheses
-" slimv
-" syntastic
-" tagbar - Vim plugin that displays tags in a window, ordered by scope http://majutsushi.github.com/tagbar/
-" vdebug
-" vim-classpath
-" vim-clojure
-" vim-dispatch
-" vim-fireplace
-" vim-racket
-
-" a - alternate files quickly .c --> .h
 
 call vundle#end()
 filetype plugin indent on
@@ -277,7 +250,10 @@ endif
 nnoremap j gj
 nnoremap k gk
 
-inoremap jk <esc>
+" let's try using the CTRL-c to get out of insert mode 
+" inoremap jk <esc>
+
+
 "
 " Select entire buffer
 " need the g_ to select all of the last line
@@ -523,12 +499,16 @@ augroup ft_c
   " au FileType c setlocal 
   au FileType c setlocal foldmethod=indent foldnestmax=1 
   " au FileType c setlocal colorcolumn=85
-  " if !s:is_windows
   au BufWrite *.c :Autoformat
   au BufWrite *.c :RemoveExtraNewlines
+  au BufWrite *.c :Errors
   au BufWrite *.h :Autoformat
   au BufWrite *.h :RemoveExtraNewlines
-  " endif
+  au BufWrite *.h :Errors
+
+  " I want // comments instead of /* */ comments!
+  call tcomment#DefineType('c', '// %s')
+  call tcomment#DefineType('h', '// %s')
 
 augroup END
 
@@ -669,6 +649,7 @@ command! ConqueRacket call s:ConqueRacket()
 " }}}
 "   syntastic {{{
 
+let g:syntastic_always_populate_loc_list=1
 let g:syntastic_debug = 0
 let g:syntastic_aggregate_errors=1
 let g:syntastic_c_checkers=['pc_lint']
@@ -724,6 +705,7 @@ let g:ConqueGdb_Leader = ',,'
 let g:signify_vcs_list = [ 'hg', 'git' ]
 "   }}}
 "   EasyTags {{{
+      " What does dynamic files mean? 
       let g:easytags_dynamic_files = 1
       let g:easytags_async = 1
 " }}}
