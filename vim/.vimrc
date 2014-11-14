@@ -250,10 +250,7 @@ endif
 nnoremap j gj
 nnoremap k gk
 
-" let's try using the CTRL-c to get out of insert mode 
-" inoremap jk <esc>
-
-
+inoremap <bs> <nop>
 "
 " Select entire buffer
 " need the g_ to select all of the last line
@@ -275,8 +272,6 @@ vnoremap L $
 " getchar() gets a character from the user input, nr2char turns that character
 " into a string
 nnoremap s :exe "normal i".nr2char(getchar())."\e"<CR>
-nnoremap <C-U> <C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y>
-nnoremap <C-D> <C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E>
 
 " make it easy to add lines above and below current line
 " because of the scrolloff option, <C-E> gets a little funky
@@ -286,10 +281,11 @@ nnoremap <C-k> o<Esc>k
 
 
 " make it easier to move around in insert mode
-inoremap <c-h> <left>
-inoremap <c-l> <right>
-inoremap <c-j> <down>
-inoremap <c-k> <up>
+" don't use this, it blocks the default operation
+" inoremap <c-h> <left>
+" inoremap <c-l> <right>
+" inoremap <c-j> <down>
+" inoremap <c-k> <up>
 
 " get rid of n_ctrl-z mapping
 inoremap <c-z> <c-o>zz
@@ -707,6 +703,7 @@ let g:signify_vcs_list = [ 'hg', 'git' ]
 "   EasyTags {{{
       " What does dynamic files mean? 
       let g:easytags_dynamic_files = 1
+      " when it's sync, it's too slow!
       let g:easytags_async = 1
 " }}}
 " }}}
