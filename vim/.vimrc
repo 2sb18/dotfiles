@@ -250,7 +250,12 @@ endif
 nnoremap j gj
 nnoremap k gk
 
+" learn to hate the backspace
 inoremap <bs> <nop>
+" learn to hate the escape
+inoremap <esc> <nop>
+nnoremap <esc> <nop>
+vnoremap <esc> <nop>
 "
 " Select entire buffer
 " need the g_ to select all of the last line
