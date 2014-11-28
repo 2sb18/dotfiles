@@ -201,7 +201,8 @@ set splitright
 " tab completion on the command-line
 set wildmenu
 set wildmode=list:longest
-set visualbell
+" turns off visual bell completely
+set visualbell t_vb=
 set cursorline
 set ttyfast
 set ruler
@@ -406,6 +407,12 @@ nnoremap <leader>s :%s/\<<C-r><C-w>\>/
 if !s:is_windows
   nnoremap <leader>tm :call VimuxRunCommand("clear;")<cr>
 endif
+
+" want to have a faster way to search
+" bring cursor to word you want to :vim search for and hit <leader>vi
+" getting the file extension is 
+nnoremap <leader>vi :exe "vim <C-r><C-w> *." . expand('%:e') . " **\\*." . expand('%:e')
+" nnoremap <leader>vi :vim <C-r><C-w> *.
 
 nnoremap <leader>vv :e $MYVIMRC<cr>
 " save and reload vimrc
