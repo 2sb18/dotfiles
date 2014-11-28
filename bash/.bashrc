@@ -138,6 +138,8 @@ cd ..
 . ~/dotfiles/scripts/carpe-diem.sh
 carpe-diem
 
-if [ "$TERM" == "xterm" ]: then
-  export TERM=xterm-256color
+if [ "$TERM" == "xterm" ]; then
+  export TERM='xterm-256color'
 fi
+
+export IPYTHONDIR="$HOME/.ipython"

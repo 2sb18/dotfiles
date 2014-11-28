@@ -253,6 +253,8 @@ nnoremap k gk
 
 " learn to hate the backspace
 inoremap <bs> <nop>
+nnoremap <bs> <nop>
+
 " learn to hate the escape
 inoremap <esc> <nop>
 nnoremap <esc> <nop>
@@ -297,7 +299,8 @@ nnoremap <C-k> o<Esc>k
 inoremap <c-z> <c-o>zz
 
 " open up a new tab with a ctrl-w thing
-nnoremap <c-w>t :tabnew<cr>
+" commented this out. you can use <c-w>T
+" nnoremap <c-w>t :tabnew<cr>
 
 " move around easier
 nnoremap } }zz
