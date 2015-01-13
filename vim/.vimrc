@@ -392,14 +392,14 @@ nnoremap <leader>r :CtrlPMRU<cr>
 " replace all words in a file
 nnoremap <leader>s :%s/\<<C-r><C-w>\>/
 
+" a faster way to search globally
+" bring cursor to word you want to :vim search for and hit <leader>t
+nnoremap <expr> <leader>t ':vim ' . expand("<cword>") . ' *.' . expand('%:e') . ' **/*.' . expand('%:e') 
+
 if !s:is_windows
   nnoremap <leader>tm :call VimuxRunCommand("clear;")<cr>
 endif
 
-" want to have a faster way to search
-" bring cursor to word you want to :vim search for and hit <leader>vi
-" getting the file extension is 
-nnoremap <leader>vi :exe "vim <C-r><C-w> *." . expand('%:e') . " **\\*." . expand('%:e')
 " nnoremap <leader>vi :vim <C-r><C-w> *.
 
 nnoremap <leader>vv :e $MYVIMRC<cr>
