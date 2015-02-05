@@ -129,7 +129,7 @@ filetype plugin indent on
 if s:is_windows
   set guifont=DejaVu_Sans_Mono_for_Powerline:h10:cANSI
 else 
-  set gfn=Droid\ Sans\ Mono\ for\ Powerline\ 11
+  set gfn=Droid\ Sans\ Mono\ for\ Powerline\ 9
 endif
 
 if !s:is_windows && system("uname -a | grep raspberrypi") != ""
@@ -253,10 +253,12 @@ nnoremap k gk
 " learn to hate the backspace
 inoremap <bs> <nop>
 nnoremap <bs> <nop>
+cnoremap <bs> <nop>
 
 " learn to hate the escape
 inoremap <esc> <nop>
 nnoremap <esc> <nop>
+cnoremap <esc> <nop>
 vnoremap <esc> <nop>
 "
 " Select entire buffer
