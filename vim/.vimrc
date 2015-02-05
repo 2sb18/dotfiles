@@ -201,7 +201,8 @@ set splitright
 " tab completion on the command-line
 set wildmenu
 set wildmode=list:longest
-set visualbell
+" turns off visual bell completely
+set visualbell t_vb=
 set cursorline
 set ttyfast
 set ruler
@@ -252,9 +253,7 @@ nnoremap k gk
 
 " learn to hate the backspace
 inoremap <bs> <nop>
-nnoremap <bs> <nop>
 cnoremap <bs> <nop>
-
 " learn to hate the escape
 inoremap <esc> <nop>
 nnoremap <esc> <nop>
@@ -272,10 +271,6 @@ nnoremap vai :let b:save_cursor = getpos(".")<cr>ggVG=:call setpos('.', b:save_c
 nnoremap n nzz
 nnoremap N Nzz
 
-nnoremap H 0
-vnoremap H 0
-nnoremap L $
-vnoremap L $
 " 
 " used for inserting one character
 " getchar() gets a character from the user input, nr2char turns that character
@@ -288,20 +283,11 @@ nnoremap <C-j> :let b:save_scrolloff = &scrolloff<cr>:set scrolloff=0<cr>O<Esc>j
 " put space below the current line
 nnoremap <C-k> o<Esc>k
 
-
-" make it easier to move around in insert mode
-" don't use this, it blocks the default operation
-" inoremap <c-h> <left>
-" inoremap <c-l> <right>
-" inoremap <c-j> <down>
-" inoremap <c-k> <up>
-
 " get rid of n_ctrl-z mapping
 inoremap <c-z> <c-o>zz
 
 " open up a new tab with a ctrl-w thing
-" commented this out. you can use <c-w>T
-" nnoremap <c-w>t :tabnew<cr>
+nnoremap <c-w>t :tabnew<cr>
 
 " move around easier
 nnoremap } }zz
@@ -408,9 +394,15 @@ nnoremap <leader>r :CtrlPMRU<cr>
 " replace all words in a file
 nnoremap <leader>s :%s/\<<C-r><C-w>\>/
 
+" a faster way to search globally
+" bring cursor to word you want to :vim search for and hit <leader>t
+nnoremap <expr> <leader>t ':vim ' . expand("<cword>") . ' *.' . expand('%:e') . ' **/*.' . expand('%:e') 
+
 if !s:is_windows
   nnoremap <leader>tm :call VimuxRunCommand("clear;")<cr>
 endif
+
+" nnoremap <leader>vi :vim <C-r><C-w> *.
 
 nnoremap <leader>vv :e $MYVIMRC<cr>
 " save and reload vimrc
@@ -495,7 +487,11 @@ function! s:RemoveExtraNewlines()
   while 1 < line(".") && 0 == strlen(getline(".")) 
     normal! dd
   endwhile
+  " insert a newline and clear anything on it that Vim
+  " might have automatically put there
   normal! o
+  normal! 0
+  normal! D
   call setpos('.', save_cursor)
 endfunction
 command! RemoveExtraNewlines call s:RemoveExtraNewlines()
@@ -505,9 +501,9 @@ augroup ft_c
   " au FileType c setlocal 
   au FileType c setlocal foldmethod=indent foldnestmax=1 
   " au FileType c setlocal colorcolumn=85
-  au BufWrite *.c :Autoformat
-  au BufWrite *.c :RemoveExtraNewlines
-  au BufWrite *.c :Errors
+  au BufWrite *.c :Autoformat|RemoveExtraNewlines|Errors
+  " au BufWrite *.c :RemoveExtraNewlines
+  " au BufWrite *.c :Errors
   au BufWrite *.h :Autoformat
   au BufWrite *.h :RemoveExtraNewlines
   au BufWrite *.h :Errors
@@ -711,6 +707,9 @@ let g:ConqueGdb_Leader = ',,'
 let g:signify_vcs_list = [ 'hg', 'git' ]
 "   }}}
 "   EasyTags {{{
+      " ./ means the path of the current file
+      " the ; at the end means it will upward search to the root directory
+      set tags=./tags;
       " What does dynamic files mean? 
       let g:easytags_dynamic_files = 1
       " when it's sync, it's too slow!
