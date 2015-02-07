@@ -120,6 +120,8 @@ Bundle "xolox/vim-easytags"
 Bundle 'maksimr/vim-jsbeautify'
 Bundle 'vim-scripts/Conque-GDB'
 
+Bundle 'joonty/vdebug'
+
 call vundle#end()
 filetype plugin indent on
 
