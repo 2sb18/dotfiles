@@ -363,12 +363,9 @@ nnoremap <leader>cd :cd %:h<cr>
 nnoremap <leader>cs :ConqueStart<cr>
 " nnoremap <leader>d :DiffSaved<cr>
 nnoremap <leader>d :bp<cr>
-" open an explorer window for the pwd
-nnoremap <leader>ex :execute "!start explorer" getcwd()<cr>
-" open a cmd window in the pwd
-if s:is_windows
-  nnoremap <leader>ec :execute '!start cmd /K "cd /d ' getcwd() '"'<cr>
-endif
+
+" show what directory the current buffer is in
+nnoremap <leader>ed :echo expand("%:p")<cr>
 
 " switching quickly between open buffers
 nnoremap <leader>f :bn<cr>
@@ -386,6 +383,19 @@ nmap <leader>k <plug>(signify-prev-hunk)
 " m for mark. easily create bookmarks in NERDTree
 nnoremap <leader>m :exe "Bookmark " . substitute( matchstr( getline("."), '-\=\<.*' ), ' ', '_', '' )<cr>
 nnoremap <leader>n :NERDTreeToggle<cr>
+
+" open explorer window for buffer
+nnoremap <leader>oeb :execute "!start explorer" expand('%:p:h')<cr>
+" open explorer window for pwd
+nnoremap <leader>oep :execute "!start explorer" getcwd()<cr>
+if s:is_windows
+" open terminal for buffer
+  nnoremap <leader>otb :execute '!start cmd /K "cd /d ' expand('%:p:h')'"'<cr>
+" open terminal for pwd
+  nnoremap <leader>otp :execute '!start cmd /K "cd /d ' getcwd() '"'<cr>
+endif
+
+
 " for some reason these gotta be nmaps instead of nnoremaps
 nmap <leader>p <Plug>yankstack_substitute_older_paste
 nmap <leader>P <Plug>yankstack_substitute_newer_paste
@@ -717,6 +727,21 @@ let g:signify_vcs_list = [ 'hg', 'git' ]
       " when it's sync, it's too slow!
       let g:easytags_async = 1
 " }}}
+"   Vdebug {{{
+  let g:vdebug_keymap = {
+    \    "step_into" : "<F1>",
+    \    "step_over" : "<F2>",
+    \    "step_out" : "<F4>",
+    \    "run" : "<F5>",
+    \    "run_to_cursor" : "shift-<F5>",
+    \    "close" : "<F6>",
+    \    "detach" : "<F8>",
+    \    "set_breakpoint" : "<F10>",
+    \    "get_context" : "<F11>",
+    \    "eval_under_cursor" : "<F12>",
+    \    "eval_visual" : "<Leader>e",
+    \}
+"   }}}
 " }}}
 " REMAPS -------------------------------------------------- {{{
 
@@ -828,4 +853,3 @@ endfunction
 " }}}
 "
 " }}}
-
