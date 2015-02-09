@@ -133,7 +133,7 @@ filetype plugin indent on
 if s:is_windows
   set guifont=DejaVu_Sans_Mono_for_Powerline:h10:cANSI
 else 
-  set gfn=Droid\ Sans\ Mono\ for\ Powerline\ 11
+  set gfn=Droid\ Sans\ Mono\ for\ Powerline\ 9
 endif
 
 if !s:is_windows && system("uname -a | grep raspberrypi") != ""
@@ -257,9 +257,11 @@ nnoremap k gk
 
 " learn to hate the backspace
 inoremap <bs> <nop>
+cnoremap <bs> <nop>
 " learn to hate the escape
 inoremap <esc> <nop>
 nnoremap <esc> <nop>
+cnoremap <esc> <nop>
 vnoremap <esc> <nop>
 "
 " Select entire buffer
@@ -296,11 +298,6 @@ nnoremap } }zz
 nnoremap { {zz
 nnoremap ( (zz
 nnoremap ) )zz
-
-" sweet autoproto replacer
-" nnoremap <leader>o <c-]>yy<c-o>pzz
-" gotta work on this!!!!
-" inoremap <c-b>   blah blah blah
 
 " "Uppercase word" mapping.
 "
@@ -368,12 +365,12 @@ nnoremap <leader>cd :cd %:h<cr>
 nnoremap <leader>cs :ConqueStart<cr>
 " nnoremap <leader>d :DiffSaved<cr>
 nnoremap <leader>d :bp<cr>
-" open an explorer window for the pwd
-nnoremap <leader>ex :execute "!start explorer" getcwd()<cr>
-" open a cmd window in the pwd
-if s:is_windows
-  nnoremap <leader>ec :execute '!start cmd /K "cd /d ' getcwd() '"'<cr>
-endif
+
+" show what directory the current buffer is in
+nnoremap <leader>ed :echo expand("%:p")<cr>
+
+" sweet autoproto replacer
+nnoremap <leader>ep <c-]>yy<c-o>pzz
 
 " switching quickly between open buffers
 nnoremap <leader>f :bn<cr>
@@ -392,8 +389,18 @@ nmap <leader>k <plug>(signify-prev-hunk)
 nnoremap <leader>m :exe "Bookmark " . substitute( matchstr( getline("."), '-\=\<.*' ), ' ', '_', '' )<cr>
 nnoremap <leader>n :NERDTreeToggle<cr>
 
-" sweet autoproto replacer
-nnoremap <leader>o <c-]>yy<c-o>pzz
+" open explorer window for buffer
+nnoremap <leader>oeb :execute "!start explorer" expand('%:p:h')<cr>
+" open explorer window for pwd
+nnoremap <leader>oep :execute "!start explorer" getcwd()<cr>
+if s:is_windows
+" open terminal for buffer
+  nnoremap <leader>otb :execute '!start cmd /K "cd /d ' expand('%:p:h')'"'<cr>
+" open terminal for pwd
+  nnoremap <leader>otp :execute '!start cmd /K "cd /d ' getcwd() '"'<cr>
+endif
+
+
 
 " for some reason these gotta be nmaps instead of nnoremaps
 nmap <leader>p <Plug>yankstack_substitute_older_paste
@@ -726,6 +733,21 @@ let g:signify_vcs_list = [ 'hg', 'git' ]
       " when it's sync, it's too slow!
       let g:easytags_async = 1
 " }}}
+"   Vdebug {{{
+  let g:vdebug_keymap = {
+    \    "step_into" : "<F1>",
+    \    "step_over" : "<F2>",
+    \    "step_out" : "<F4>",
+    \    "run" : "<F5>",
+    \    "run_to_cursor" : "shift-<F5>",
+    \    "close" : "<F6>",
+    \    "detach" : "<F8>",
+    \    "set_breakpoint" : "<F10>",
+    \    "get_context" : "<F11>",
+    \    "eval_under_cursor" : "<F12>",
+    \    "eval_visual" : "<Leader>e",
+    \}
+"   }}}
 " }}}
 " REMAPS -------------------------------------------------- {{{
 
@@ -837,4 +859,3 @@ endfunction
 " }}}
 "
 " }}}
-
