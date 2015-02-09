@@ -14,6 +14,8 @@
 "       - problem with astyle 2.04
 "       - it's fixed in the repository, going to wait till it's
 "         fixed in a release version.
+"
+"   - make our autoproto replacement hotter, check out inoremap <c-b> in here
 " }}}   
 " Ideal Coding Setup -------------------------------------- {{{
 
@@ -119,6 +121,8 @@ Bundle "xolox/vim-easytags"
 " Language specific
 Bundle 'maksimr/vim-jsbeautify'
 Bundle 'vim-scripts/Conque-GDB'
+
+Bundle 'joonty/vdebug'
 
 call vundle#end()
 filetype plugin indent on
@@ -293,6 +297,11 @@ nnoremap { {zz
 nnoremap ( (zz
 nnoremap ) )zz
 
+" sweet autoproto replacer
+" nnoremap <leader>o <c-]>yy<c-o>pzz
+" gotta work on this!!!!
+" inoremap <c-b>   blah blah blah
+
 " "Uppercase word" mapping.
 "
 " This mapping allows you to press <c-u> in insert mode to convert the current
@@ -382,6 +391,10 @@ nmap <leader>k <plug>(signify-prev-hunk)
 " m for mark. easily create bookmarks in NERDTree
 nnoremap <leader>m :exe "Bookmark " . substitute( matchstr( getline("."), '-\=\<.*' ), ' ', '_', '' )<cr>
 nnoremap <leader>n :NERDTreeToggle<cr>
+
+" sweet autoproto replacer
+nnoremap <leader>o <c-]>yy<c-o>pzz
+
 " for some reason these gotta be nmaps instead of nnoremaps
 nmap <leader>p <Plug>yankstack_substitute_older_paste
 nmap <leader>P <Plug>yankstack_substitute_newer_paste
