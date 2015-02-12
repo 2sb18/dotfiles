@@ -362,10 +362,17 @@ nnoremap <leader>cs :ConqueStart<cr>
 " nnoremap <leader>d :DiffSaved<cr>
 nnoremap <leader>d :bp<cr>
 " open an explorer window for the pwd
-nnoremap <leader>ex :execute "!start explorer" getcwd()<cr>
-" open a cmd window in the pwd
 if s:is_windows
-  nnoremap <leader>ec :execute '!start cmd /K "cd /d ' getcwd() '"'<cr>
+  nnoremap <leader>ex :execute "!explorer" expand('%:p:h')<cr>
+else
+  nnoremap <leader>ex :execute "!nautilus" expand('%:p:h')<cr>
+endif
+
+" open a cmd window from buffer location
+if s:is_windows
+  nnoremap <leader>et :execute '!cmd /K "cd /d ' expand('%:p:h')'"'<cr>
+else
+  nnoremap <leader>et :execute '!/bin/bash' expand('%:p:h')<cr>
 endif
 
 " switching quickly between open buffers
