@@ -120,6 +120,8 @@ Bundle "xolox/vim-easytags"
 Bundle 'maksimr/vim-jsbeautify'
 Bundle 'vim-scripts/Conque-GDB'
 
+Bundle 'joonty/vdebug'
+
 call vundle#end()
 filetype plugin indent on
 
@@ -361,7 +363,13 @@ nnoremap <leader>cd :cd %:h<cr>
 nnoremap <leader>cs :ConqueStart<cr>
 " nnoremap <leader>d :DiffSaved<cr>
 nnoremap <leader>d :bp<cr>
-" open an explorer window for the pwd
+
+" show what directory the current buffer is in
+nnoremap <leader>ed :echo expand("%:p")<cr>
+
+" sweet autoproto replacer
+nnoremap <leader>ep <c-]>yy<c-o>pzz
+
 if s:is_windows
   nnoremap <leader>ex :execute "!explorer" expand('%:p:h')<cr>
 else
@@ -722,6 +730,21 @@ let g:signify_vcs_list = [ 'hg', 'git' ]
       " when it's sync, it's too slow!
       let g:easytags_async = 1
 " }}}
+"   Vdebug {{{
+  let g:vdebug_keymap = {
+    \    "step_into" : "<F1>",
+    \    "step_over" : "<F2>",
+    \    "step_out" : "<F4>",
+    \    "run" : "<F5>",
+    \    "run_to_cursor" : "shift-<F5>",
+    \    "close" : "<F6>",
+    \    "detach" : "<F8>",
+    \    "set_breakpoint" : "<F10>",
+    \    "get_context" : "<F11>",
+    \    "eval_under_cursor" : "<F12>",
+    \    "eval_visual" : "<Leader>e",
+    \}
+"   }}}
 " }}}
 " REMAPS -------------------------------------------------- {{{
 
@@ -833,4 +856,3 @@ endfunction
 " }}}
 "
 " }}}
-
