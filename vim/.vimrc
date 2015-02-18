@@ -371,14 +371,14 @@ nnoremap <leader>ed :echo expand("%:p")<cr>
 nnoremap <leader>ep <c-]>yy<c-o>pzz
 
 if s:is_windows
-  nnoremap <leader>ex :execute "!explorer" expand('%:p:h')<cr>
+  nnoremap <leader>ex :execute "!start explorer" expand('%:p:h')<cr>
 else
   nnoremap <leader>ex :execute "!nautilus" expand('%:p:h')<cr>
 endif
 
 " open a cmd window from buffer location
 if s:is_windows
-  nnoremap <leader>et :execute '!cmd /K "cd /d ' expand('%:p:h')'"'<cr>
+  nnoremap <leader>et :execute '!start cmd /K "cd /d ' expand('%:p:h')'"'<cr>
 else
   nnoremap <leader>et :execute '!/bin/bash' expand('%:p:h')<cr>
 endif
