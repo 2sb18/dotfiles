@@ -321,7 +321,7 @@ nnoremap ) )zz
 "
 " Note that this will overwrite the contents of the z mark.  I never use it, but
 " if you do you'll probably want to use another mark.
-inoremap <C-u> <esc>mzgUiw`za
+inoremap <C-f> <esc>mzgUiw`za
 "
 
 " make it easier to apply the dot command to each line of a selection
