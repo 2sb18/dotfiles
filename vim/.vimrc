@@ -2,6 +2,8 @@
 "
 "
 " Problems ------------------------------------------------ {{{
+"   - easy tag still isn't great
+"   - still don't use greplace very well
 "   :1,$!astyle (called by :Autoformat) an empty c file results in a 0x01 being written
 "   :Autoformat a c file results in crlf being added
 "     - seems to be astyle, since it only happens with c files
@@ -129,7 +131,7 @@ filetype plugin indent on
 " Environments (GUI, Console, Fonts ) --------------------- {{{
 
 if s:is_windows
-  set guifont=DejaVu_Sans_Mono_for_Powerline:h10:cANSI
+  set guifont=DejaVu_Sans_Mono_for_Powerline:h8:cANSI
 else 
   set gfn=Droid\ Sans\ Mono\ for\ Powerline\ 9
 endif
@@ -138,6 +140,8 @@ if !s:is_windows && system("uname -a | grep raspberrypi") != ""
   colorscheme jellybeans
 else
   colorscheme molokai
+  " colorscheme mustang
+  " colorscheme jellybeans
 endif
 
 " make comments brighter
@@ -153,8 +157,7 @@ syntax on
 
 highlight Cursor guifg=black guibg=green
 highlight iCursor guifg=black guibg=magenta
-" highlight CursorLine guibg=#111111 
-highlight CursorLine guibg=#36291C
+highlight CursorLine guibg=#111111
 set guicursor=n-v-c:block-Cursor
 set guicursor+=i:ver100-iCursor
 set guicursor+=n-v-c:blinkon0
@@ -246,6 +249,11 @@ set formatoptions=qrn1l
 if !s:is_windows
   set formatoptions+=j
 endif
+
+" disabling omnicomplete with sql files
+let g:omni_sql_no_default_maps = 1
+
+
 " }}}
 " Convenience Mappings ------------------------------------ {{{
 "   Non-Leader Mappings {{{ 
