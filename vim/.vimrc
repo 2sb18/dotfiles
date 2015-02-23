@@ -150,15 +150,14 @@ hi Comment guifg=#C8C8C8
 augroup CursorColours
   au!
   au WinEnter * setlocal cursorline
-  au BufEnter * highlight CursorLine guibg=#111111
-  " au WinLeave * setlocal nocursorline
-  au FocusLost * highlight CursorLine guibg=#007A99
+  au WinLeave * setlocal nocursorline
 augroup END
 
 syntax on
 
 highlight Cursor guifg=black guibg=green
 highlight iCursor guifg=black guibg=magenta
+highlight CursorLine guibg=#111111
 set guicursor=n-v-c:block-Cursor
 set guicursor+=i:ver100-iCursor
 set guicursor+=n-v-c:blinkon0
