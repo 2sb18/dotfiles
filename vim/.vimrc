@@ -332,6 +332,10 @@ nnoremap ) )zz
 inoremap <C-f> <esc>mzgUiw`za
 "
 
+" in insert mode, ctrl-d does a shift width. I'd rather have it delete
+" character under cursor like in bash
+inoremap <C-d> <del>
+
 " make it easier to apply the dot command to each line of a selection
 xnoremap . :normal .<CR>
 
@@ -735,7 +739,7 @@ let g:signify_vcs_list = [ 'hg', 'git' ]
       " Dynamic files means that easytags writes to the project specific tags
       let g:easytags_dynamic_files = 1
       " when it's sync, it's too slow!
-      let g:easytags_async = 0
+      let g:easytags_async = 1
 " }}}
 "   Vdebug {{{
   let g:vdebug_keymap = {
