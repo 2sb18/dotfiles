@@ -33,6 +33,7 @@
 " - install Cscope
 " - Ack!!!!
 " - find a better changelist plugin, one that works across files
+" - cursorline highlighting to easily find where I am
 " }}}
 " OS ------------------------------------------------------ {{{
 
@@ -130,7 +131,7 @@ filetype plugin indent on
 " Environments (GUI, Console, Fonts ) --------------------- {{{
 
 if s:is_windows
-  set guifont=DejaVu_Sans_Mono_for_Powerline:h8:cANSI
+  set guifont=DejaVu_Sans_Mono_for_Powerline:h9:cANSI
 else 
   set gfn=Droid\ Sans\ Mono\ for\ Powerline\ 9
 endif
@@ -150,13 +151,15 @@ augroup CursorColours
   au!
   au WinEnter * setlocal cursorline
   au WinLeave * setlocal nocursorline
+  au FocusGained * highlight CursorLine guibg=#111111
+  au FocusLost * highlight CursorLine guibg=#00FFFF
 augroup END
 
 syntax on
 
 highlight Cursor guifg=black guibg=green
 highlight iCursor guifg=black guibg=magenta
-highlight CursorLine guibg=#111111
+" highlight CursorLine guibg=#111111
 set guicursor=n-v-c:block-Cursor
 set guicursor+=i:ver100-iCursor
 set guicursor+=n-v-c:blinkon0
@@ -735,7 +738,8 @@ let g:signify_vcs_list = [ 'hg', 'git' ]
       " Dynamic files means that easytags writes to the project specific tags
       let g:easytags_dynamic_files = 1
       " when it's sync, it's too slow!
-      let g:easytags_async = 1
+      let g:easytags_async = 0
+      let g:easytags_events = ['BufWritePost']
 " }}}
 "   Vdebug {{{
   let g:vdebug_keymap = {
@@ -757,6 +761,9 @@ let g:signify_vcs_list = [ 'hg', 'git' ]
   nmap s <Plug>(easymotion-s)
   let g:EasyMotion_smartcase = 1
   " there's also <leader>j and <leader>k bindings
+" }}}
+"   Yankstank {{{
+   let g:yankstack_map_keys = 0
 " }}}
 " }}}
 " REMAPS -------------------------------------------------- {{{
