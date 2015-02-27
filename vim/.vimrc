@@ -1,4 +1,6 @@
 " Problems ------------------------------------------------ {{{
+"   - easy tag still isn't great
+"   - still don't use greplace very well
 "   :1,$!astyle (called by :Autoformat) an empty c file results in a 0x01 being written
 "   :Autoformat a c file results in crlf being added
 "     - seems to be astyle, since it only happens with c files
@@ -18,7 +20,7 @@
 " Autocompiling - syntastic
 " Autocomplete - Super Tab
 " Unit Testing - Dispatch. raco for racket
-" Tagging - ctags, autotag, and autoproto
+" Tagging - ctags, easytag
 " Debugging - vdebug for some stuff (PHP)
 " Linting (optional) - syntastic + linting program
 " Versioning - Fugitive for Git and Lawercium for Mercurial. vim-signify to 
@@ -128,7 +130,7 @@ filetype plugin indent on
 " Environments (GUI, Console, Fonts ) --------------------- {{{
 
 if s:is_windows
-  set guifont=DejaVu_Sans_Mono_for_Powerline:h10:cANSI
+  set guifont=DejaVu_Sans_Mono_for_Powerline:h8:cANSI
 else 
   set gfn=Droid\ Sans\ Mono\ for\ Powerline\ 9
 endif
@@ -137,6 +139,8 @@ if !s:is_windows && system("uname -a | grep raspberrypi") != ""
   colorscheme jellybeans
 else
   colorscheme molokai
+  " colorscheme mustang
+  " colorscheme jellybeans
 endif
 
 " make comments brighter
@@ -152,8 +156,7 @@ syntax on
 
 highlight Cursor guifg=black guibg=green
 highlight iCursor guifg=black guibg=magenta
-" highlight CursorLine guibg=#111111 
-highlight CursorLine guibg=#36291C
+highlight CursorLine guibg=#111111
 set guicursor=n-v-c:block-Cursor
 set guicursor+=i:ver100-iCursor
 set guicursor+=n-v-c:blinkon0
@@ -245,6 +248,11 @@ set formatoptions=qrn1l
 if !s:is_windows
   set formatoptions+=j
 endif
+
+" disabling omnicomplete with sql files
+let g:omni_sql_no_default_maps = 1
+
+
 " }}}
 " Convenience Mappings ------------------------------------ {{{
 "   Non-Leader Mappings {{{ 
@@ -355,9 +363,11 @@ nnoremap <leader>bw :CtrlPBuffer<cr>
 nnoremap <leader>cc :Compile<cr>
 nnoremap <leader>cg :Debug<cr>
 nnoremap <leader>cr :Run<cr>
-nnoremap <leader>ct :CTags<cr>
 nnoremap <leader>ca :ConqueRacket<cr>
+" change working directory to the current file
 nnoremap <leader>cd :cd %:h<cr>
+" show the full path of the current file
+nnoremap <leader>cf :echo expand("%:p")<cr>
 " nnoremap <leader>cr :ConqueReload<cr>
 nnoremap <leader>cs :ConqueStart<cr>
 " nnoremap <leader>d :DiffSaved<cr>
@@ -365,21 +375,19 @@ nnoremap <leader>cs :ConqueStart<cr>
 " navigating buffers
 nnoremap <leader>d :bp<cr>
 
-" show what directory the current buffer is in
-nnoremap <leader>ed :echo expand("%:p")<cr>
 
 " sweet autoproto replacer
 nnoremap <leader>ep <c-]>yy<c-o>pzz
 
 if s:is_windows
-  nnoremap <leader>ex :execute "!explorer" expand('%:p:h')<cr>
+  nnoremap <leader>ex :execute "!start explorer" expand('%:p:h')<cr>
 else
   nnoremap <leader>ex :execute "!nautilus" expand('%:p:h')<cr>
 endif
 
 " open a cmd window from buffer location
 if s:is_windows
-  nnoremap <leader>et :execute '!cmd /K "cd /d ' expand('%:p:h')'"'<cr>
+  nnoremap <leader>et :execute '!start cmd /K "cd /d ' expand('%:p:h')'"'<cr>
 else
   nnoremap <leader>et :execute '!/bin/bash' expand('%:p:h')<cr>
 endif
@@ -421,7 +429,6 @@ endif
 
 nnoremap <leader>vv :e $MYVIMRC<cr>
 " save and reload vimrc
-" nnoremap <leader>vs :w<cr>et b:vimrc_wd = getcwd()<cr>:so $MYVIMRC<cr>:exe "cd " . b:vimrc_wd<cr>:bd<cr>
 nnoremap <leader>vs :w<cr>:so $MYVIMRC<cr>
 
 nnoremap <leader>w <C-w>v<C-w>l
@@ -721,10 +728,10 @@ let g:signify_vcs_list = [ 'hg', 'git' ]
       " ./ means the path of the current file
       " the ; at the end means it will upward search to the root directory
       set tags=./tags;
-      " What does dynamic files mean? 
+      " Dynamic files means that easytags writes to the project specific tags
       let g:easytags_dynamic_files = 1
       " when it's sync, it's too slow!
-      let g:easytags_async = 1
+      let g:easytags_async = 0
 " }}}
 "   Vdebug {{{
   let g:vdebug_keymap = {
@@ -809,15 +816,6 @@ endfunction
 " using the ! is necessary cause we often reexecute the vimrc
 command! Run call s:Run()
 
-function! s:CTags()
-  w
-  if s:is_windows
-    !start ctags -R .
-  else
-    !ctags -R .
-  endif
-endfunction
-command! CTags call s:CTags()
 " }}}
 " Disorganized Crap --------------------------------------- {{{
 
