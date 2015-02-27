@@ -1,6 +1,3 @@
-" got a bunch of stuff from Steve Losh's vimrc
-"
-"
 " Problems ------------------------------------------------ {{{
 "   - easy tag still isn't great
 "   - still don't use greplace very well
@@ -123,6 +120,8 @@ Bundle 'maksimr/vim-jsbeautify'
 Bundle 'vim-scripts/Conque-GDB'
 
 Bundle 'joonty/vdebug'
+
+Bundle 'Lokaltog/vim-easymotion'
 
 call vundle#end()
 filetype plugin indent on
@@ -376,6 +375,8 @@ nnoremap <leader>cf :echo expand("%:p")<cr>
 " nnoremap <leader>cr :ConqueReload<cr>
 nnoremap <leader>cs :ConqueStart<cr>
 " nnoremap <leader>d :DiffSaved<cr>
+
+" navigating buffers
 nnoremap <leader>d :bp<cr>
 
 
@@ -399,9 +400,8 @@ endif
 nnoremap <leader>f :bn<cr>
 nnoremap <leader>g :GundoToggle<cr>
 
-" for some reason these have to be nmaps!
-nmap <leader>j <plug>(signify-next-hunk)
-nmap <leader>k <plug>(signify-prev-hunk)
+map <leader>j <plug>(easymotion-j)
+map <leader>k <plug>(easymotion-k)
 
 "for linting
 " don't need any more since we're using syntastic. actually, maybe in would be
@@ -486,8 +486,8 @@ set foldtext=MyFoldText()
 "   PHP {{{
 augroup ft_php
   au!
-  au FileType php setlocal foldnestmax=1
-  au FileType php setlocal foldmethod=indent
+  " au FileType php setlocal foldnestmax=1
+  " au FileType php setlocal foldmethod=indent
   au BufWrite *.php :Autoformat
 augroup END
 
@@ -525,7 +525,7 @@ command! RemoveExtraNewlines call s:RemoveExtraNewlines()
 augroup ft_c
   au!
   " au FileType c setlocal 
-  au FileType c setlocal foldmethod=indent foldnestmax=1 
+  " au FileType c setlocal foldmethod=indent foldnestmax=1 
   " au FileType c setlocal colorcolumn=85
   au BufWrite *.c :Autoformat|RemoveExtraNewlines|Errors
   " au BufWrite *.c :RemoveExtraNewlines
@@ -676,7 +676,6 @@ endfunction
 command! ConqueRacket call s:ConqueRacket()
 " }}}
 "   syntastic {{{
-
 let g:syntastic_always_populate_loc_list=1
 let g:syntastic_debug = 0
 let g:syntastic_aggregate_errors=1
@@ -688,14 +687,11 @@ let g:syntastic_javascript_jsl_conf='"%HOME%\jsl.conf"'
 let g:syntastic_javascript_jshint_conf=$HOME.'/.jshintrc'
 let g:syntastic_php_checkers=['php', 'phpcs', 'phpmd']
 " let g:syntastic_racket_checkers=['racket']
-
 " }}}
 "   Airline {{{
-
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
 let g:airline_powerline_fonts=1
-
 " }}}
 "   Pulse Line {{{
 function! s:Pulse() " {{{
@@ -756,6 +752,12 @@ let g:signify_vcs_list = [ 'hg', 'git' ]
     \    "eval_visual" : "<Leader>e",
     \}
 "   }}}
+"   Easymotion {{{
+  let g:EasyMotion_do_mapping = 0 "Disable default mappings
+  nmap s <Plug>(easymotion-s)
+  let g:EasyMotion_smartcase = 1
+  " there's also <leader>j and <leader>k bindings
+" }}}
 " }}}
 " REMAPS -------------------------------------------------- {{{
 
