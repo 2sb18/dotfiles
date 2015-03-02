@@ -98,6 +98,8 @@ Bundle 'godlygeek/csapprox'
 " show changes to the file since last commit
 Bundle 'mhinz/vim-signify'
 
+Bundle 'haya14busa/incsearch.vim'
+
 " snipmate stuff 
 "snipmate depends on this
 Bundle "MarcWeber/vim-addon-mw-utils"
@@ -220,13 +222,14 @@ set guioptions-=L
 set relativenumber
 set undofile
 set undoreload=10000
+
+" search and replace options
 set gdefault
 " tame searching/moving
 " magic regexs, so they are like normal
-nnoremap / /\v
-vnoremap / /\v
+" nnoremap / /\v
+" vnoremap / /\v
 set hlsearch
-
 set ignorecase
 " if any letters are capitalized in a search,
 " then search is case-sensitive
@@ -280,7 +283,8 @@ nnoremap vai :let b:save_cursor = getpos(".")<cr>ggVG=:call setpos('.', b:save_c
 " for searching
 nnoremap n nzz
 nnoremap N Nzz
-
+nnoremap * *zz
+nnoremap # #zz
 " 
 " used for inserting one character
 " getchar() gets a character from the user input, nr2char turns that character
@@ -349,6 +353,10 @@ function! ExecuteMacroOverVisualRange()
 endfunction
 
 nmap s <Plug>(easymotion-s)
+
+map / <Plug>(incsearch-forward)
+map ? <Plug>(incsearch-backward)
+map g/ <Plug>(incsearch-stay)
 
 " }}}
 "   Leader Mappings {{{
