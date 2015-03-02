@@ -54,7 +54,7 @@ else
   set shell=/bin/bash
 endif
 " }}}
-" Vundle - ------------------------------------------------ {{{
+" Vundle -------------------------------------------------- {{{
 "
 
 
@@ -74,7 +74,6 @@ Bundle 'gmarik/vundle'
 
 Bundle 'bling/vim-airline'
 Bundle 'scrooloose/nerdtree'
-" gotta switch back to scrooloose/syntastic after I've done my thing
 Bundle 'scrooloose/syntastic'
 Bundle 'tomtom/tcomment_vim'
 Bundle 'Chiel92/vim-autoformat'
@@ -99,10 +98,6 @@ Bundle 'godlygeek/csapprox'
 " show changes to the file since last commit
 Bundle 'mhinz/vim-signify'
 
-" not working well for me. should have more manual
-" control over tagging
-" Bundle 'vim-scripts/AutoTag'
-
 " snipmate stuff 
 "snipmate depends on this
 Bundle "MarcWeber/vim-addon-mw-utils"
@@ -116,13 +111,12 @@ Bundle "honza/vim-snippets"
 Bundle "xolox/vim-misc"
 Bundle "xolox/vim-easytags"
 
+Bundle 'Lokaltog/vim-easymotion'
+
 " Language specific
 Bundle 'maksimr/vim-jsbeautify'
 Bundle 'vim-scripts/Conque-GDB'
-
 Bundle 'joonty/vdebug'
-
-Bundle 'Lokaltog/vim-easymotion'
 
 call vundle#end()
 filetype plugin indent on
@@ -151,7 +145,7 @@ augroup CursorColours
   au!
   au WinEnter * setlocal cursorline
   au WinLeave * setlocal nocursorline
-  au FocusGained * highlight CursorLine guibg=#111111
+  au CursorMoved,CursorMovedI * highlight CursorLine guibg=#111111
   au FocusLost * highlight CursorLine guibg=#00FFFF
 augroup END
 
@@ -258,6 +252,10 @@ let g:omni_sql_no_default_maps = 1
 
 " }}}
 " Convenience Mappings ------------------------------------ {{{
+
+" Yankstack mappings need to happen before my own mappings
+call yankstack#setup()
+
 "   Non-Leader Mappings {{{ 
 " gj moves down screen lines instead of file lines
 nnoremap j gj
@@ -287,7 +285,8 @@ nnoremap N Nzz
 " used for inserting one character
 " getchar() gets a character from the user input, nr2char turns that character
 " into a string
-nnoremap s :exe "normal i".nr2char(getchar())."\e"<CR>
+" nnoremap s :exe "normal i".nr2char(getchar())."\e"<CR>
+" I have easymotion working on the s character now, so no longer want this
 
 " make it easy to add lines above and below current line
 " because of the scrolloff option, <C-E> gets a little funky
@@ -348,6 +347,8 @@ function! ExecuteMacroOverVisualRange()
   echo "@".getcmdline()
   execute ":'<,'>normal @".nr2char(getchar())
 endfunction
+
+nmap s <Plug>(easymotion-s)
 
 " }}}
 "   Leader Mappings {{{
@@ -611,6 +612,9 @@ let NERDTreeMinimalUI = 1
 let NERDChristmasTree = 1
 let NERDTreeShowHidden = 1
 " }}}
+"   Yankstank {{{
+   let g:yankstack_map_keys = 0
+" }}}
 "   slimv {{{
 
 let g:slimv_preferred = 'mit'
@@ -686,8 +690,13 @@ let g:syntastic_c_checkers=['pc_lint']
 let g:syntastic_c_compiler_options = '-std=gnu99 -Wall'
 let g:syntastic_html_checkers = ['validator']
 let g:syntastic_javascript_checkers=['jshint']
-let g:syntastic_javascript_jsl_conf='"%HOME%\jsl.conf"'
-let g:syntastic_javascript_jshint_conf=$HOME.'/.jshintrc'
+if s:is_windows
+  " have to install node and jsnit for this to work
+  let g:syntastic_javascript_jshint_args= '--config "'.$HOME.'/dotfiles/vim/.jshintrc"'
+  " let g:syntastic_javascript_jshint_conf='HOME.'/dotfiles/vim/.jshintrc'
+else 
+  let g:syntastic_javascript_jshint_conf=$HOME.'/.jshintrc'
+endif
 let g:syntastic_php_checkers=['php', 'phpcs', 'phpmd']
 " let g:syntastic_racket_checkers=['racket']
 " }}}
@@ -738,7 +747,7 @@ let g:signify_vcs_list = [ 'hg', 'git' ]
       " Dynamic files means that easytags writes to the project specific tags
       let g:easytags_dynamic_files = 1
       " when it's sync, it's too slow!
-      let g:easytags_async = 0
+      let g:easytags_async = 1
       let g:easytags_events = ['BufWritePost']
 " }}}
 "   Vdebug {{{
@@ -758,12 +767,8 @@ let g:signify_vcs_list = [ 'hg', 'git' ]
 "   }}}
 "   Easymotion {{{
   let g:EasyMotion_do_mapping = 0 "Disable default mappings
-  nmap s <Plug>(easymotion-s)
   let g:EasyMotion_smartcase = 1
   " there's also <leader>j and <leader>k bindings
-" }}}
-"   Yankstank {{{
-   let g:yankstack_map_keys = 0
 " }}}
 " }}}
 " REMAPS -------------------------------------------------- {{{
