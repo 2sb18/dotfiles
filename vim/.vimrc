@@ -146,7 +146,7 @@ augroup CursorColours
   au WinEnter * setlocal cursorline
   au WinLeave * setlocal nocursorline
   au CursorMoved,CursorMovedI * highlight CursorLine guibg=#111111
-  au FocusLost * highlight CursorLine guibg=#00FFFF
+  au FocusLost * highlight CursorLine guibg=#0099CC 
 augroup END
 
 syntax on
