@@ -1,4 +1,5 @@
 " Problems ------------------------------------------------ {{{
+"   - copy and pasting on linux laptop
 "   - easy tag still isn't great
 "   - still don't use greplace very well
 "   :1,$!astyle (called by :Autoformat) an empty c file results in a 0x01 being written
@@ -615,7 +616,9 @@ let g:slimv_leader = '\'
 
 " }}}
 "   ctrlp {{{
-let g:ctrlp_cache_dir = $TEMP.'/.cache/ctrlp'
+if s:is_windows
+  let g:ctrlp_cache_dir = $TEMP.'/.cache/ctrlp'
+endif
 let g:ctrlp_match_window = 'max:30'
 " }}}
 "   bufExplorer {{{
@@ -677,7 +680,7 @@ let g:syntastic_debug = 0
 let g:syntastic_aggregate_errors=1
 let g:syntastic_c_checkers=['pc_lint']
 let g:syntastic_c_compiler_options = '-std=gnu99 -Wall'
-let g:syntastic_html_checkers = ['validator']
+let g:syntastic_html_checkers = ['w3']
 let g:syntastic_javascript_checkers=['jshint']
 let g:syntastic_javascript_jsl_conf='"%HOME%\jsl.conf"'
 let g:syntastic_javascript_jshint_conf=$HOME.'/.jshintrc'
@@ -753,6 +756,10 @@ let g:signify_vcs_list = [ 'hg', 'git' ]
   nmap s <Plug>(easymotion-s)
   let g:EasyMotion_smartcase = 1
   " there's also <leader>j and <leader>k bindings
+" }}}
+"   Yankstack {{{
+"don't let yankstack add mappings by default. It screws with easymotion
+   let g:yankstack_map_keys = 0
 " }}}
 " }}}
 " REMAPS -------------------------------------------------- {{{
