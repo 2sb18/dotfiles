@@ -34,6 +34,7 @@
 " - install Cscope
 " - Ack!!!!
 " - find a better changelist plugin, one that works across files
+" - cursorline highlighting to easily find where I am
 " }}}
 " OS ------------------------------------------------------ {{{
 
@@ -54,7 +55,7 @@ else
   set shell=/bin/bash
 endif
 " }}}
-" Vundle - ------------------------------------------------ {{{
+" Vundle -------------------------------------------------- {{{
 "
 
 
@@ -74,7 +75,6 @@ Bundle 'gmarik/vundle'
 
 Bundle 'bling/vim-airline'
 Bundle 'scrooloose/nerdtree'
-" gotta switch back to scrooloose/syntastic after I've done my thing
 Bundle 'scrooloose/syntastic'
 Bundle 'tomtom/tcomment_vim'
 Bundle 'Chiel92/vim-autoformat'
@@ -99,9 +99,7 @@ Bundle 'godlygeek/csapprox'
 " show changes to the file since last commit
 Bundle 'mhinz/vim-signify'
 
-" not working well for me. should have more manual
-" control over tagging
-" Bundle 'vim-scripts/AutoTag'
+Bundle 'haya14busa/incsearch.vim'
 
 " snipmate stuff 
 "snipmate depends on this
@@ -116,13 +114,12 @@ Bundle "honza/vim-snippets"
 Bundle "xolox/vim-misc"
 Bundle "xolox/vim-easytags"
 
+Bundle 'Lokaltog/vim-easymotion'
+
 " Language specific
 Bundle 'maksimr/vim-jsbeautify'
 Bundle 'vim-scripts/Conque-GDB'
-
 Bundle 'joonty/vdebug'
-
-Bundle 'Lokaltog/vim-easymotion'
 
 call vundle#end()
 filetype plugin indent on
@@ -131,7 +128,7 @@ filetype plugin indent on
 " Environments (GUI, Console, Fonts ) --------------------- {{{
 
 if s:is_windows
-  set guifont=DejaVu_Sans_Mono_for_Powerline:h8:cANSI
+  set guifont=DejaVu_Sans_Mono_for_Powerline:h9:cANSI
 else 
   set gfn=Droid\ Sans\ Mono\ for\ Powerline\ 9
 endif
@@ -151,13 +148,15 @@ augroup CursorColours
   au!
   au WinEnter * setlocal cursorline
   au WinLeave * setlocal nocursorline
+  au CursorMoved,CursorMovedI * highlight CursorLine guibg=#111111
+  au FocusLost * highlight CursorLine guibg=#0099CC 
 augroup END
 
 syntax on
 
 highlight Cursor guifg=black guibg=green
 highlight iCursor guifg=black guibg=magenta
-highlight CursorLine guibg=#111111
+" highlight CursorLine guibg=#111111
 set guicursor=n-v-c:block-Cursor
 set guicursor+=i:ver100-iCursor
 set guicursor+=n-v-c:blinkon0
@@ -224,13 +223,14 @@ set guioptions-=L
 set relativenumber
 set undofile
 set undoreload=10000
+
+" search and replace options
 set gdefault
 " tame searching/moving
 " magic regexs, so they are like normal
-nnoremap / /\v
-vnoremap / /\v
+" nnoremap / /\v
+" vnoremap / /\v
 set hlsearch
-
 set ignorecase
 " if any letters are capitalized in a search,
 " then search is case-sensitive
@@ -256,6 +256,10 @@ let g:omni_sql_no_default_maps = 1
 
 " }}}
 " Convenience Mappings ------------------------------------ {{{
+
+" Yankstack mappings need to happen before my own mappings
+call yankstack#setup()
+
 "   Non-Leader Mappings {{{ 
 " gj moves down screen lines instead of file lines
 nnoremap j gj
@@ -280,12 +284,14 @@ nnoremap vai :let b:save_cursor = getpos(".")<cr>ggVG=:call setpos('.', b:save_c
 " for searching
 nnoremap n nzz
 nnoremap N Nzz
-
+nnoremap * *zz
+nnoremap # #zz
 " 
 " used for inserting one character
 " getchar() gets a character from the user input, nr2char turns that character
 " into a string
-nnoremap s :exe "normal i".nr2char(getchar())."\e"<CR>
+" nnoremap s :exe "normal i".nr2char(getchar())."\e"<CR>
+" I have easymotion working on the s character now, so no longer want this
 
 " make it easy to add lines above and below current line
 " because of the scrolloff option, <C-E> gets a little funky
@@ -329,8 +335,12 @@ nnoremap ) )zz
 "
 " Note that this will overwrite the contents of the z mark.  I never use it, but
 " if you do you'll probably want to use another mark.
-inoremap <C-u> <esc>mzgUiw`za
+inoremap <C-f> <esc>mzgUiw`za
 "
+
+" in insert mode, ctrl-d does a shift width. I'd rather have it delete
+" character under cursor like in bash
+inoremap <C-d> <del>
 
 " make it easier to apply the dot command to each line of a selection
 xnoremap . :normal .<CR>
@@ -342,6 +352,12 @@ function! ExecuteMacroOverVisualRange()
   echo "@".getcmdline()
   execute ":'<,'>normal @".nr2char(getchar())
 endfunction
+
+nmap s <Plug>(easymotion-s)
+
+map / <Plug>(incsearch-forward)
+map ? <Plug>(incsearch-backward)
+map g/ <Plug>(incsearch-stay)
 
 " }}}
 "   Leader Mappings {{{
@@ -605,6 +621,9 @@ let NERDTreeMinimalUI = 1
 let NERDChristmasTree = 1
 let NERDTreeShowHidden = 1
 " }}}
+"   Yankstank {{{
+   let g:yankstack_map_keys = 0
+" }}}
 "   slimv {{{
 
 let g:slimv_preferred = 'mit'
@@ -682,8 +701,13 @@ let g:syntastic_c_checkers=['pc_lint']
 let g:syntastic_c_compiler_options = '-std=gnu99 -Wall'
 let g:syntastic_html_checkers = ['w3']
 let g:syntastic_javascript_checkers=['jshint']
-let g:syntastic_javascript_jsl_conf='"%HOME%\jsl.conf"'
-let g:syntastic_javascript_jshint_conf=$HOME.'/.jshintrc'
+if s:is_windows
+  " have to install node and jsnit for this to work
+  let g:syntastic_javascript_jshint_args= '--config "'.$HOME.'/dotfiles/vim/.jshintrc"'
+  " let g:syntastic_javascript_jshint_conf='HOME.'/dotfiles/vim/.jshintrc'
+else 
+  let g:syntastic_javascript_jshint_conf=$HOME.'/.jshintrc'
+endif
 let g:syntastic_php_checkers=['php', 'phpcs', 'phpmd']
 " let g:syntastic_racket_checkers=['racket']
 " }}}
@@ -734,7 +758,8 @@ let g:signify_vcs_list = [ 'hg', 'git' ]
       " Dynamic files means that easytags writes to the project specific tags
       let g:easytags_dynamic_files = 1
       " when it's sync, it's too slow!
-      let g:easytags_async = 0
+      let g:easytags_async = 1
+      let g:easytags_events = ['BufWritePost']
 " }}}
 "   Vdebug {{{
   let g:vdebug_keymap = {
@@ -753,7 +778,6 @@ let g:signify_vcs_list = [ 'hg', 'git' ]
 "   }}}
 "   Easymotion {{{
   let g:EasyMotion_do_mapping = 0 "Disable default mappings
-  nmap s <Plug>(easymotion-s)
   let g:EasyMotion_smartcase = 1
   " there's also <leader>j and <leader>k bindings
 " }}}
