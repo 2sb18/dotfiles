@@ -459,7 +459,7 @@ nnoremap <leader><space> :noh<cr>
 " Folding ------------------------------------------------- {{{
 
 set foldmethod=marker
-set foldlevelstart=0  "always start editing with all folds closed
+set foldlevelstart=-1  "always start editing with all folds closed
 
 nnoremap <space> za
 vnoremap <space> za
@@ -611,6 +611,15 @@ augroup ft_markdown
   au!
   au BufRead,BufNewFile *.md setlocal filetype=markdown
 augroup END
+" }}}
+"   FreePCB {{{
+
+" changes the size of ref designators to 30/5
+command! FpcResizeRef :%s/\v^part: \a\d+\n  ref_text: \zs\d+ \d+/762000 127000/
+command! FpcResizeText :%s/\v^text: ".*" \S+ \S+ \S+ \S+ \S+ \zs\S+ \S+/762000 127000/
+command! FpcHideTandE :%s/\vpart: (E|T)\d+\n  ref_text: \S+ \S+ \S+ \S+ \S+ \zs\d/0/
+
+" command! DiffSaved call s:DiffWithSaved()
 " }}}
 " }}}
 " Plugin settings ----------------------------------------- {{{
@@ -791,7 +800,7 @@ function! s:DiffWithSaved()
   diffthis
   exe "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . filetype
 endfunction
-com! DiffSaved call s:DiffWithSaved()
+command! DiffSaved call s:DiffWithSaved()
 
 function! s:Debug()
   w
