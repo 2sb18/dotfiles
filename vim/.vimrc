@@ -58,7 +58,6 @@ endif
 " Vundle -------------------------------------------------- {{{
 "
 
-
 if s:is_windows
   " for vundle
   set runtimepath+=$HOME\vimfiles\bundle\vundle
@@ -114,7 +113,8 @@ Bundle "honza/vim-snippets"
 Bundle "xolox/vim-misc"
 Bundle "xolox/vim-easytags"
 
-Bundle 'Lokaltog/vim-easymotion'
+" pretty slow
+" Bundle 'Lokaltog/vim-easymotion'
 
 " Language specific
 Bundle 'maksimr/vim-jsbeautify'
@@ -130,7 +130,7 @@ filetype plugin indent on
 if s:is_windows
   set guifont=DejaVu_Sans_Mono_for_Powerline:h9:cANSI
 else 
-  set gfn=Droid\ Sans\ Mono\ for\ Powerline\ 9
+  set gfn=Droid\ Sans\ Mono\ for\ Powerline\ 11
 endif
 
 if !s:is_windows && system("uname -a | grep raspberrypi") != ""
@@ -148,6 +148,7 @@ augroup CursorColours
   au!
   au WinEnter * setlocal cursorline
   au WinLeave * setlocal nocursorline
+  " makes conqueterm slow
   au CursorMoved,CursorMovedI * highlight CursorLine guibg=#111111
   au FocusLost * highlight CursorLine guibg=#0099CC 
 augroup END
@@ -353,7 +354,7 @@ function! ExecuteMacroOverVisualRange()
   execute ":'<,'>normal @".nr2char(getchar())
 endfunction
 
-nmap s <Plug>(easymotion-s)
+" nmap s <Plug>(easymotion-s)
 
 map / <Plug>(incsearch-forward)
 map ? <Plug>(incsearch-backward)
@@ -413,8 +414,9 @@ endif
 nnoremap <leader>f :bn<cr>
 nnoremap <leader>g :GundoToggle<cr>
 
-map <leader>j <plug>(easymotion-j)
-map <leader>k <plug>(easymotion-k)
+" removed easymotion
+" map <leader>j <plug>(easymotion-j)
+" map <leader>k <plug>(easymotion-k)
 
 "for linting
 " don't need any more since we're using syntastic. actually, maybe in would be
@@ -436,7 +438,7 @@ nnoremap <leader>s :%s/\<<C-r><C-w>\>/
 
 " a faster way to search globally
 " bring cursor to word you want to :vim search for and hit <leader>t
-nnoremap <expr> <leader>t ':vim ' . expand("<cword>") . ' *.' . expand('%:e') . ' **/*.' . expand('%:e') 
+nnoremap <expr> <leader>t ':vim ' . expand("<cword>") . ' **/*.' . expand('%:e') 
 
 if !s:is_windows
   nnoremap <leader>tm :call VimuxRunCommand("clear;")<cr>
@@ -697,7 +699,7 @@ command! ConqueRacket call s:ConqueRacket()
 let g:syntastic_always_populate_loc_list=1
 let g:syntastic_debug = 0
 let g:syntastic_aggregate_errors=1
-let g:syntastic_c_checkers=['pc_lint']
+let g:syntastic_c_checkers=['pc_lint', 'gcc', 'make']
 let g:syntastic_c_compiler_options = '-std=gnu99 -Wall'
 let g:syntastic_html_checkers = ['w3']
 let g:syntastic_javascript_checkers=['jshint']
@@ -777,8 +779,8 @@ let g:signify_vcs_list = [ 'hg', 'git' ]
     \}
 "   }}}
 "   Easymotion {{{
-  let g:EasyMotion_do_mapping = 0 "Disable default mappings
-  let g:EasyMotion_smartcase = 1
+  " let g:EasyMotion_do_mapping = 0 "Disable default mappings
+  " let g:EasyMotion_smartcase = 1
   " there's also <leader>j and <leader>k bindings
 " }}}
 "   Yankstack {{{
