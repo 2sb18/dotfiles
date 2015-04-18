@@ -1,3 +1,6 @@
+" Ideas --------------------------------------------------- {{{
+" install broswerlink.vim to live code
+" }}}
 " Problems ------------------------------------------------ {{{
 "   - copy and pasting on linux laptop
 "   - easy tag still isn't great
@@ -115,6 +118,8 @@ Bundle "xolox/vim-easytags"
 
 " pretty slow
 " Bundle 'Lokaltog/vim-easymotion'
+
+Bundle 'jaxbot/browserlink.vim'
 
 " Language specific
 Bundle 'maksimr/vim-jsbeautify'
@@ -462,7 +467,7 @@ nnoremap <leader><space> :noh<cr>
 " Folding ------------------------------------------------- {{{
 
 set foldmethod=marker
-set foldlevelstart=0  "always start editing with all folds closed
+set foldlevelstart=-1  "always start editing with all folds closed
 
 nnoremap <space> za
 vnoremap <space> za
@@ -614,6 +619,30 @@ augroup ft_markdown
   au!
   au BufRead,BufNewFile *.md setlocal filetype=markdown
 augroup END
+" }}}
+"   FreePCB {{{
+
+" changes the size of ref designators to 30/5
+command! FpcResizeRef :%s/\v^part: \a\d+\n  ref_text: \zs\d+ \d+/762000 127000/
+command! FpcResizeText :%s/\v^text: ".*" \S+ \S+ \S+ \S+ \S+ \zs\S+ \S+/762000 127000/
+command! FpcHideTandE :%s/\vpart: (E|T)\d+\n  ref_text: \S+ \S+ \S+ \S+ \S+ \zs\d/0/
+
+" text: "reverb 04a" 92710000 71120000 7 0 0 762000 127000 0
+"
+" if third number is 8 it's on bottom silk
+" text: "reverb 04a" 92710000 71120000 8 0 0 762000 127000 0
+" if 5th number is 1, it's mirror imaged
+" text: "reverb 04a" 92583000 70993000 8 0 1 762000 127000 0
+
+" there's a problem if we can find the following. The 8 means it's on the
+" bottom silk, the zero means it's non mirrored
+command! FpcFindNonMirroredTextOnBottom /\v^text: ".*" \S+ \S+ 8 \S+ 0/
+
+" move all T parts to the bottom side
+" if the 3rd number is 1, it's on the bottom
+command! FpcMoveTtoBottom :%s/\v^part: T\d+\n.*\n.*\n.*\n  pos: \S+ \S+ \zs\S+/1/
+
+" command! DiffSaved call s:DiffWithSaved()
 " }}}
 " }}}
 " Plugin settings ----------------------------------------- {{{
@@ -800,7 +829,7 @@ function! s:DiffWithSaved()
   diffthis
   exe "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . filetype
 endfunction
-com! DiffSaved call s:DiffWithSaved()
+command! DiffSaved call s:DiffWithSaved()
 
 function! s:Debug()
   w
