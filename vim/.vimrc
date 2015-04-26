@@ -227,6 +227,8 @@ set guioptions-=L
 
 " line numbers that are relative
 set relativenumber
+" put the absolute number infront of the current line
+set number 
 set undofile
 set undoreload=10000
 
