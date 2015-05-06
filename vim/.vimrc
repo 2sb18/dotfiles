@@ -73,57 +73,68 @@ endif
 " Must haves
 
 " let Vundle manage Vundle
-Bundle 'gmarik/vundle'
+Plugin 'gmarik/vundle'
 
-Bundle 'bling/vim-airline'
-Bundle 'scrooloose/nerdtree'
-Bundle 'scrooloose/syntastic'
-Bundle 'tomtom/tcomment_vim'
-Bundle 'Chiel92/vim-autoformat'
-Bundle 'jlanzarotta/bufexplorer'
-Bundle 'maxbrunsfeld/vim-yankstack'
-Bundle 'sjl/gundo.vim'
-Bundle 'ervandew/supertab'
-Bundle 'vim-scripts/matchit.zip'
-Bundle 'vim-scripts/bufkill.vim'
+Plugin 'bling/vim-airline'
+Plugin 'scrooloose/nerdtree'
+Plugin 'scrooloose/syntastic'
+Plugin 'tomtom/tcomment_vim'
+Plugin 'Chiel92/vim-autoformat'
+Plugin 'jlanzarotta/bufexplorer'
+Plugin 'maxbrunsfeld/vim-yankstack'
+Plugin 'sjl/gundo.vim'
+Plugin 'ervandew/supertab'
+Plugin 'vim-scripts/matchit.zip'
+Plugin 'vim-scripts/bufkill.vim'
 " git commands
-Bundle 'tpope/vim-fugitive'
+
+Plugin 'tpope/vim-fugitive'
 " mercurial commands
-Bundle 'ludovicchabant/vim-lawrencium'
+Plugin 'ludovicchabant/vim-lawrencium'
 " global search and replace
-Bundle 'skwp/greplace.vim'
+" problems with this
+" Plugin 'skwp/greplace.vim'
+Plugin 'yegappan/greplace'
 " full path fuzzy file, buffer, mru, tag, ... finder for vim
-Bundle 'kien/ctrlp.vim'
+Plugin 'kien/ctrlp.vim'
 
 " make gvim-only colorschemes work transparently in terminal vim
-Bundle 'godlygeek/csapprox'
+Plugin 'godlygeek/csapprox'
 
 " show changes to the file since last commit
-Bundle 'mhinz/vim-signify'
+Plugin 'mhinz/vim-signify'
 
-Bundle 'haya14busa/incsearch.vim'
+Plugin 'haya14busa/incsearch.vim'
+
+" fast search with awk!
+Plugin 'mileszs/ack.vim'
 
 " snipmate stuff 
 "snipmate depends on this
-Bundle "MarcWeber/vim-addon-mw-utils"
+Plugin 'MarcWeber/vim-addon-mw-utils'
 "snipmate depends on this
-Bundle "tomtom/tlib_vim"
-Bundle "garbas/vim-snipmate"
+Plugin 'tomtom/tlib_vim'
+Plugin 'garbas/vim-snipmate'
 "snipmate doesn't ship with snippets, so these are some snippets
-Bundle "honza/vim-snippets"     
+Plugin 'honza/vim-snippets'     
 
 " vim-misc is needed for easytags
-Bundle "xolox/vim-misc"
-Bundle "xolox/vim-easytags"
+Plugin 'xolox/vim-misc'
+Plugin 'xolox/vim-easytags'
 
-Bundle 'Lokaltog/vim-easymotion'
+Plugin 'Lokaltog/vim-easymotion'
 
-Bundle 'jaxbot/browserlink.vim'
+" always changing directory to browswerlink
+" Plugin 'jaxbot/browserlink.vim'
 
 " Language specific
-Bundle 'maksimr/vim-jsbeautify'
-Bundle 'vim-scripts/Conque-GDB'
-Bundle 'joonty/vdebug'
+Plugin 'maksimr/vim-jsbeautify'
+Plugin 'vim-scripts/Conque-GDB'
+Plugin 'joonty/vdebug'
+
+" fix the problem with aliasing on the command line
+Plugin 'vim-scripts/cmdalias.vim'
+
 
 call vundle#end()
 filetype plugin indent on
@@ -216,15 +227,16 @@ set ttyfast
 set ruler
 set backspace=indent,eol,start
 set laststatus=2
-" T gets rid of menu buttons
 " t gets rid of tearoff menu items
 set guioptions-=t
+" T gets rid of menu buttons
 set guioptions-=T
 set guioptions-=r
 set guioptions-=L
 
 " line numbers that are relative
 set relativenumber
+set number
 set undofile
 set undoreload=10000
 
@@ -256,6 +268,12 @@ endif
 
 " disabling omnicomplete with sql files
 let g:omni_sql_no_default_maps = 1
+
+" updatecount screws with vdebug
+set updatecount=0
+
+" to make Greplace work when searching child directories
+set grepprg=internal
 
 
 " }}}
@@ -363,6 +381,8 @@ map / <Plug>(incsearch-forward)
 map ? <Plug>(incsearch-backward)
 map g/ <Plug>(incsearch-stay)
 
+cabbrev ack Ack
+
 " }}}
 "   Leader Mappings {{{
 
@@ -370,8 +390,6 @@ let mapleader = ","
 
 " double tap , to go back through search
 nnoremap <leader>; ,
-nnoremap <leader>aa :Ack 
-nnoremap <leader>aw :Ack <C-r><C-w><cr>
 " make current window bigger
 nnoremap <leader>bb <c-w>10><c-w>10+
 nnoremap <leader>be :BufExplorerVerticalSplit<cr> 
@@ -440,7 +458,8 @@ nnoremap <leader>s :%s/\<<C-r><C-w>\>/
 
 " a faster way to search globally
 " bring cursor to word you want to :vim search for and hit <leader>t
-nnoremap <expr> <leader>t ':vim ' . expand("<cword>") . ' *.' . expand('%:e') . ' **/*.' . expand('%:e') 
+" nnoremap <expr> <leader>t ':vim ' . expand("<cword>") . ' *.' . expand('%:e') . ' **/*.' . expand('%:e') 
+nnoremap <expr> <leader>t ':Ack ' . expand("<cword>") 
 
 if !s:is_windows
   nnoremap <leader>tm :call VimuxRunCommand("clear;")<cr>
@@ -801,6 +820,24 @@ let g:signify_vcs_list = [ 'hg', 'git' ]
     \    "eval_under_cursor" : "<F12>",
     \    "eval_visual" : "<Leader>e",
     \}
+
+    let g:vdebug_options= {
+    \    "continuous_mode" : 1,
+    \    "port" : 9000,
+    \    "server" : 'localhost',
+    \    "timeout" : 60,
+    \    "on_close" : 'detach',
+    \    "break_on_open" : 0,
+    \    "ide_key" : '',
+    \    "path_maps" : {},
+    \    "debug_window_level" : 0,
+    \    "debug_file_level" : 0,
+    \    "debug_file" : "",
+    \    "watch_window_style" : 'expanded',
+    \    "marker_default" : '⬦',
+    \    "marker_closed_tree" : '▸',
+    \    "marker_open_tree" : '▾'
+    \}
 "   }}}
 "   Easymotion {{{
   let g:EasyMotion_do_mapping = 0 "Disable default mappings
@@ -909,3 +946,5 @@ endfunction
 " }}}
 "
 " }}}
+
+
