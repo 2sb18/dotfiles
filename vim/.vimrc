@@ -2,6 +2,7 @@
 " install broswerlink.vim to live code
 " }}}
 " Problems ------------------------------------------------ {{{
+"   - copy and pasting on linux laptop
 "   - easy tag still isn't great
 "   - still don't use greplace very well
 "   :1,$!astyle (called by :Autoformat) an empty c file results in a 0x01 being written
@@ -122,7 +123,6 @@ Plugin 'honza/vim-snippets'
 Plugin 'xolox/vim-misc'
 Plugin 'xolox/vim-easytags'
 
-Plugin 'Lokaltog/vim-easymotion'
 
 " always changing directory to browswerlink
 " Plugin 'jaxbot/browserlink.vim'
@@ -163,6 +163,7 @@ augroup CursorColours
   au!
   au WinEnter * setlocal cursorline
   au WinLeave * setlocal nocursorline
+  " makes conqueterm slow
   au CursorMoved,CursorMovedI * highlight CursorLine guibg=#111111
   au FocusLost * highlight CursorLine guibg=#0099CC 
 augroup END
@@ -236,7 +237,8 @@ set guioptions-=L
 
 " line numbers that are relative
 set relativenumber
-set number
+" put the absolute number infront of the current line
+set number 
 set undofile
 set undoreload=10000
 
@@ -381,8 +383,6 @@ map / <Plug>(incsearch-forward)
 map ? <Plug>(incsearch-backward)
 map g/ <Plug>(incsearch-stay)
 
-cabbrev ack Ack
-
 " }}}
 "   Leader Mappings {{{
 
@@ -435,8 +435,9 @@ endif
 nnoremap <leader>f :bn<cr>
 nnoremap <leader>g :GundoToggle<cr>
 
-map <leader>j <plug>(easymotion-j)
-map <leader>k <plug>(easymotion-k)
+" removed easymotion
+" map <leader>j <plug>(easymotion-j)
+" map <leader>k <plug>(easymotion-k)
 
 "for linting
 " don't need any more since we're using syntastic. actually, maybe in would be
@@ -682,7 +683,9 @@ let g:slimv_leader = '\'
 
 " }}}
 "   ctrlp {{{
-let g:ctrlp_cache_dir = $TEMP.'/.cache/ctrlp'
+if s:is_windows
+  let g:ctrlp_cache_dir = $TEMP.'/.cache/ctrlp'
+endif
 let g:ctrlp_match_window = 'max:30'
 " }}}
 "   bufExplorer {{{
@@ -840,9 +843,13 @@ let g:signify_vcs_list = [ 'hg', 'git' ]
     \}
 "   }}}
 "   Easymotion {{{
-  let g:EasyMotion_do_mapping = 0 "Disable default mappings
-  let g:EasyMotion_smartcase = 1
+  " let g:EasyMotion_do_mapping = 0 "Disable default mappings
+  " let g:EasyMotion_smartcase = 1
   " there's also <leader>j and <leader>k bindings
+" }}}
+"   Yankstack {{{
+"don't let yankstack add mappings by default. It screws with easymotion
+   let g:yankstack_map_keys = 0
 " }}}
 " }}}
 " REMAPS -------------------------------------------------- {{{
@@ -946,5 +953,3 @@ endfunction
 " }}}
 "
 " }}}
-
-
