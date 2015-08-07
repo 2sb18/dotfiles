@@ -135,6 +135,8 @@ Plugin 'joonty/vdebug'
 " fix the problem with aliasing on the command line
 Plugin 'vim-scripts/cmdalias.vim'
 
+Plugin 'terryma/vim-expand-region'
+
 
 call vundle#end()
 filetype plugin indent on
@@ -486,8 +488,8 @@ nnoremap <leader><space> :noh<cr>
 set foldmethod=marker
 set foldlevelstart=-1  "always start editing with all folds closed
 
-nnoremap <space> za
-vnoremap <space> za
+" nnoremap <space> za
+" vnoremap <space> za
 
 " "Focus" the current line.  Basically:
 "
@@ -743,6 +745,9 @@ command! ConqueRacket call s:ConqueRacket()
 " }}}
 "   syntastic {{{
 let g:syntastic_always_populate_loc_list=1
+" 2 ( dump location lists ) allows you to see errors in the include
+" 1 allows ??
+" setting to 3 gives good output to help debug
 let g:syntastic_debug = 0
 let g:syntastic_aggregate_errors=1
 let g:syntastic_c_checkers=['pc_lint']
@@ -851,6 +856,9 @@ let g:signify_vcs_list = [ 'hg', 'git' ]
 "don't let yankstack add mappings by default. It screws with easymotion
    let g:yankstack_map_keys = 0
 " }}}
+"   ExpandRegion {{{
+vmap v <Plug>(expand_region_expand)
+vmap <C-v> <Plug>(expand_region_shrink)
 " }}}
 " REMAPS -------------------------------------------------- {{{
 
