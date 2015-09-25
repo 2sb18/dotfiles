@@ -1,4 +1,6 @@
 " Ideas --------------------------------------------------- {{{
+" How to use :Gsearch
+" Gsearch firmware_get_next_data **/*.h **/*.c 
 " install broswerlink.vim to live code
 " }}}
 " Problems ------------------------------------------------ {{{
@@ -279,6 +281,8 @@ set updatecount=0
 " to make Greplace work when searching child directories
 set grepprg=internal
 
+" files that get changed elsewhere are automatically updated in vim
+set autoread
 
 " }}}
 " Convenience Mappings ------------------------------------ {{{
@@ -412,6 +416,9 @@ nnoremap <leader>cf :echo expand("%:p")<cr>
 " nnoremap <leader>cr :ConqueReload<cr>
 nnoremap <leader>cs :ConqueStart<cr>
 " nnoremap <leader>d :DiffSaved<cr>
+"
+" change to project root
+" !!! still gotta do!
 
 " navigating buffers
 nnoremap <leader>d :bp<cr>
@@ -488,8 +495,8 @@ nnoremap <leader><space> :noh<cr>
 set foldmethod=marker
 set foldlevelstart=-1  "always start editing with all folds closed
 
-" nnoremap <space> za
-" vnoremap <space> za
+nnoremap <space> zazz
+vnoremap <space> za
 
 " "Focus" the current line.  Basically:
 "
@@ -564,7 +571,7 @@ command! RemoveExtraNewlines call s:RemoveExtraNewlines()
 augroup ft_c
   au!
   " au FileType c setlocal 
-  " au FileType c setlocal foldmethod=indent foldnestmax=1 
+  au FileType c setlocal foldmethod=indent foldnestmax=1 
   " au FileType c setlocal colorcolumn=85
   au BufWrite *.c :Autoformat|RemoveExtraNewlines|Errors
   " au BufWrite *.c :RemoveExtraNewlines
