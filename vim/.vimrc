@@ -573,9 +573,9 @@ augroup ft_c
   " au FileType c setlocal 
   au FileType c setlocal foldmethod=indent foldnestmax=1 
   " au FileType c setlocal colorcolumn=85
-  au BufWrite *.c :Autoformat|RemoveExtraNewlines|Errors
-  " au BufWrite *.c :RemoveExtraNewlines
-  " au BufWrite *.c :Errors
+  au BufWrite *.c :Autoformat
+  au BufWrite *.c :RemoveExtraNewlines
+  au BufWrite *.c :Errors
   au BufWrite *.h :Autoformat
   au BufWrite *.h :RemoveExtraNewlines
   au BufWrite *.h :Errors
@@ -591,11 +591,15 @@ augroup END
 " indent classes, switches, namespaces
 " pad operators, parenthesis
 " keep one line statements
-let g:formatprg_c="astyle"
-let g:formatprg_h="astyle"
-let s:astyle_format="--indent=spaces=2 --style=attach --indent-classes --indent-switches --indent-namespaces --pad-oper --pad-paren --keep-one-line-statements"
-let g:formatprg_args_c=s:astyle_format
-let g:formatprg_args_h=s:astyle_format
+" let g:formatprg_c="astyle"
+" let g:formatprg_h="astyle"
+" let s:astyle_format="--indent=spaces=2 --style=attach --indent-classes --indent-switches --indent-namespaces --pad-oper --pad-paren --keep-one-line-statements"
+" let g:formatprg_args_c=s:astyle_format
+" let g:formatprg_args_h=s:astyle_format
+
+let g:formatdef_my_custom_c ='"astyle --indent=spaces=2 --style=attach --indent-classes --indent-switches --indent-namespaces --pad-oper --pad-paren --keep-one-line-statements"'
+let g:formatters_c = ['my_custom_c']
+let g:formatters_h = ['my_custom_h']
 
 " }}}
 "   Racket {{{
