@@ -37,7 +37,6 @@
 " }}}   
 " things to learn/fix in vim ------------------------------ {{{
 " - install Cscope
-" - Ack!!!!
 " - find a better changelist plugin, one that works across files
 " - cursorline highlighting to easily find where I am
 " }}}
@@ -83,9 +82,13 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
 Plugin 'tomtom/tcomment_vim'
 Plugin 'Chiel92/vim-autoformat'
+" PHP specific formatting
+Plugin '2072/PHP-Indenting-for-VIm'
 Plugin 'jlanzarotta/bufexplorer'
 Plugin 'maxbrunsfeld/vim-yankstack'
-Plugin 'sjl/gundo.vim'
+" Plugin 'sjl/gundo.vim'
+" is mundo the new hotness?
+Plugin 'simnalamburt/vim-mundo'
 Plugin 'ervandew/supertab'
 Plugin 'vim-scripts/matchit.zip'
 Plugin 'vim-scripts/bufkill.vim'
@@ -138,6 +141,8 @@ Plugin 'joonty/vdebug'
 Plugin 'vim-scripts/cmdalias.vim'
 
 Plugin 'terryma/vim-expand-region'
+
+Plugin 'osyo-manga/vim-over'
 
 
 call vundle#end()
@@ -316,6 +321,10 @@ nnoremap n nzz
 nnoremap N Nzz
 nnoremap * *zz
 nnoremap # #zz
+
+" hot emacs stuff for insert mode
+inoremap <c-b> <left>
+inoremap <c-f> <right>
 " 
 " used for inserting one character
 " getchar() gets a character from the user input, nr2char turns that character
@@ -340,33 +349,6 @@ nnoremap } }zz
 nnoremap { {zz
 nnoremap ( (zz
 nnoremap ) )zz
-
-" "Uppercase word" mapping.
-"
-" This mapping allows you to press <c-u> in insert mode to convert the current
-" word to uppercase.  It's handy when you're writing names of constants and
-" don't want to use Capslock.
-"
-" To use it you type the name of the constant in lowercase.  While your
-" cursor is at the end of the word, press <c-u> to uppercase it, and then
-" continue happily on your way:
-"
-"                            cursor
-"                            v
-"     max_connections_allowed|
-"     <c-u>
-"     MAX_CONNECTIONS_ALLOWED|
-"                            ^
-"                            cursor
-"
-" It works by exiting out of insert mode, recording the current cursor location
-" in the z mark, using gUiw to uppercase inside the current word, moving back to
-" the z mark, and entering insert mode again.
-"
-" Note that this will overwrite the contents of the z mark.  I never use it, but
-" if you do you'll probably want to use another mark.
-inoremap <C-f> <esc>mzgUiw`za
-"
 
 " in insert mode, ctrl-d does a shift width. I'd rather have it delete
 " character under cursor like in bash
@@ -394,6 +376,11 @@ map g/ <Plug>(incsearch-stay)
 
 let mapleader = ","
 
+" a faster way to search globally
+" bring cursor to word you want to :vim search for and hit <leader>t
+" nnoremap <expr> <leader>t ':vim ' . expand("<cword>") . ' *.' . expand('%:e') . ' **/*.' . expand('%:e') 
+nnoremap <expr> <leader>a ':Ack ' . expand("<cword>") 
+
 " double tap , to go back through search
 nnoremap <leader>; ,
 " make current window bigger
@@ -420,9 +407,6 @@ nnoremap <leader>cs :ConqueStart<cr>
 " change to project root
 " !!! still gotta do!
 
-" navigating buffers
-nnoremap <leader>d :bp<cr>
-
 
 " sweet autoproto replacer
 nnoremap <leader>ep <c-]>yy<c-o>pzz
@@ -442,6 +426,7 @@ endif
 
 " switching quickly between open buffers
 nnoremap <leader>f :bn<cr>
+nnoremap <leader>d :bp<cr>
 nnoremap <leader>g :GundoToggle<cr>
 
 " removed easymotion
@@ -469,7 +454,7 @@ nnoremap <leader>s :%s/\<<C-r><C-w>\>/
 " a faster way to search globally
 " bring cursor to word you want to :vim search for and hit <leader>t
 " nnoremap <expr> <leader>t ':vim ' . expand("<cword>") . ' *.' . expand('%:e') . ' **/*.' . expand('%:e') 
-nnoremap <expr> <leader>t ':Ack ' . expand("<cword>") 
+nnoremap <expr> <leader>t ':tag ' . expand("<cword>") 
 
 if !s:is_windows
   nnoremap <leader>tm :call VimuxRunCommand("clear;")<cr>
@@ -534,7 +519,7 @@ augroup ft_php
   au!
   " au FileType php setlocal foldnestmax=1
   " au FileType php setlocal foldmethod=indent
-  au BufWrite *.php :Autoformat
+  " au BufWrite *.php :Autoformat
 augroup END
 
 " }}}
@@ -544,8 +529,7 @@ augroup ft_javascript
   au BufWrite *.js :Autoformat
 augroup END
 
-let g:formatprg_javascript="js-beautify"
-let g:formatprg_args_javascript="--indent-size 2 --file -"
+" let g:formatprg_args_javascript="--indent-size 2 --file -"
 
 
 " }}}
@@ -573,9 +557,9 @@ augroup ft_c
   " au FileType c setlocal 
   au FileType c setlocal foldmethod=indent foldnestmax=1 
   " au FileType c setlocal colorcolumn=85
-  au BufWrite *.c :Autoformat|RemoveExtraNewlines|Errors
-  " au BufWrite *.c :RemoveExtraNewlines
-  " au BufWrite *.c :Errors
+  au BufWrite *.c :Autoformat
+  au BufWrite *.c :RemoveExtraNewlines
+  au BufWrite *.c :Errors
   au BufWrite *.h :Autoformat
   au BufWrite *.h :RemoveExtraNewlines
   au BufWrite *.h :Errors
@@ -591,11 +575,10 @@ augroup END
 " indent classes, switches, namespaces
 " pad operators, parenthesis
 " keep one line statements
-let g:formatprg_c="astyle"
-let g:formatprg_h="astyle"
-let s:astyle_format="--indent=spaces=2 --style=attach --indent-classes --indent-switches --indent-namespaces --pad-oper --pad-paren --keep-one-line-statements"
-let g:formatprg_args_c=s:astyle_format
-let g:formatprg_args_h=s:astyle_format
+" !!!!! this isn't working right I think. Try changing indent-spaces
+let g:formatdef_my_custom_c = '"astyle --indent=spaces=2 --style=attach --indent-classes --indent-switches --indent-namespaces --pad-oper --pad-paren --keep-one-line-statements"'
+let g:formatters_c = ['my_custom_c']
+let g:autoformat_verbosemode = 1
 
 " }}}
 "   Racket {{{
@@ -624,7 +607,7 @@ augroup END
 augroup ft_html
   au!
   au FileType html setlocal spell spelllang=en_us
-  au BufWrite *.html :Autoformat
+  " au BufWrite *.html :Autoformat
 augroup END
 "
 " }}}
@@ -679,7 +662,7 @@ let NERDChristmasTree = 1
 let NERDTreeShowHidden = 1
 " }}}
 "   Yankstank {{{
-   let g:yankstack_map_keys = 0
+let g:yankstack_map_keys = 0
 " }}}
 "   slimv {{{
 
@@ -696,6 +679,10 @@ if s:is_windows
   let g:ctrlp_cache_dir = $TEMP.'/.cache/ctrlp'
 endif
 let g:ctrlp_match_window = 'max:30'
+" I want to use ctrl-h to delete a character 
+let g:ctrlp_prompt_mappings = { 'PrtBS()': ['<c-h>'], 'PrtCurLeft()': ['<c-b>'] }
+" open the file in the window you came from
+let g:ctrlp_switch_buffer = '0'
 " }}}
 "   bufExplorer {{{
 let g:bufExplorerShowNoName=1
@@ -812,60 +799,66 @@ let g:ConqueGdb_Leader = ',,'
 let g:signify_vcs_list = [ 'hg', 'git' ]
 "   }}}
 "   EasyTags {{{
-      " ./ means the path of the current file
-      " the ; at the end means it will upward search to the root directory
-      set tags=./tags;
-      " Dynamic files means that easytags writes to the project specific tags
-      let g:easytags_dynamic_files = 1
-      " when it's sync, it's too slow!
-      let g:easytags_async = 1
-      let g:easytags_events = ['BufWritePost']
+" ./ means the path of the current file
+" the ; at the end means it will upward search to the root directory
+set tags=./tags;
+" Dynamic files means that easytags writes to the project specific tags
+let g:easytags_dynamic_files = 1
+" when it's sync, it's too slow!
+let g:easytags_async = 1
+let g:easytags_events = ['BufWritePost']
 " }}}
 "   Vdebug {{{
-  let g:vdebug_keymap = {
-    \    "step_into" : "<F1>",
-    \    "step_over" : "<F2>",
-    \    "step_out" : "<F4>",
-    \    "run" : "<F5>",
-    \    "run_to_cursor" : "shift-<F5>",
-    \    "close" : "<F6>",
-    \    "detach" : "<F8>",
-    \    "set_breakpoint" : "<F10>",
-    \    "get_context" : "<F11>",
-    \    "eval_under_cursor" : "<F12>",
-    \    "eval_visual" : "<Leader>e",
-    \}
+let g:vdebug_keymap = {
+      \    "step_into" : "<F1>",
+      \    "step_over" : "<F2>",
+      \    "step_out" : "<F4>",
+      \    "run" : "<F5>",
+      \    "run_to_cursor" : "shift-<F5>",
+      \    "close" : "<F6>",
+      \    "detach" : "<F8>",
+      \    "set_breakpoint" : "<F10>",
+      \    "get_context" : "<F11>",
+      \    "eval_under_cursor" : "<F12>",
+      \    "eval_visual" : "<Leader>e",
+      \}
 
-    let g:vdebug_options= {
-    \    "continuous_mode" : 1,
-    \    "port" : 9000,
-    \    "server" : 'localhost',
-    \    "timeout" : 60,
-    \    "on_close" : 'detach',
-    \    "break_on_open" : 0,
-    \    "ide_key" : '',
-    \    "path_maps" : {},
-    \    "debug_window_level" : 0,
-    \    "debug_file_level" : 0,
-    \    "debug_file" : "",
-    \    "watch_window_style" : 'expanded',
-    \    "marker_default" : '⬦',
-    \    "marker_closed_tree" : '▸',
-    \    "marker_open_tree" : '▾'
-    \}
+let g:vdebug_options= {
+      \    "continuous_mode" : 1,
+      \    "port" : 9000,
+      \    "server" : 'localhost',
+      \    "timeout" : 60,
+      \    "on_close" : 'detach',
+      \    "break_on_open" : 0,
+      \    "ide_key" : '',
+      \    "path_maps" : {},
+      \    "debug_window_level" : 0,
+      \    "debug_file_level" : 0,
+      \    "debug_file" : "",
+      \    "watch_window_style" : 'expanded',
+      \    "marker_default" : '⬦',
+      \    "marker_closed_tree" : '▸',
+      \    "marker_open_tree" : '▾'
+      \}
 "   }}}
 "   Easymotion {{{
-  " let g:EasyMotion_do_mapping = 0 "Disable default mappings
-  " let g:EasyMotion_smartcase = 1
-  " there's also <leader>j and <leader>k bindings
+" let g:EasyMotion_do_mapping = 0 "Disable default mappings
+" let g:EasyMotion_smartcase = 1
+" there's also <leader>j and <leader>k bindings
 " }}}
 "   Yankstack {{{
 "don't let yankstack add mappings by default. It screws with easymotion
-   let g:yankstack_map_keys = 0
+let g:yankstack_map_keys = 0
 " }}}
 "   ExpandRegion {{{
 vmap v <Plug>(expand_region_expand)
 vmap <C-v> <Plug>(expand_region_shrink)
+" }}}
+"   Ack {{{
+let g:ack_default_options =
+      \ " -s -H --nocolor --nogroup --column --smart-case --follow --ignore-file=ext:mak,orig,vdx"
+
+"   }}}
 " }}}
 " REMAPS -------------------------------------------------- {{{
 
