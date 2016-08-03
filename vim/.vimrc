@@ -37,6 +37,7 @@
 " }}}   
 " things to learn/fix in vim ------------------------------ {{{
 " - install Cscope
+" - Ack!!!!
 " - find a better changelist plugin, one that works across files
 " - cursorline highlighting to easily find where I am
 " }}}
@@ -376,11 +377,6 @@ map g/ <Plug>(incsearch-stay)
 
 let mapleader = ","
 
-" a faster way to search globally
-" bring cursor to word you want to :vim search for and hit <leader>t
-" nnoremap <expr> <leader>t ':vim ' . expand("<cword>") . ' *.' . expand('%:e') . ' **/*.' . expand('%:e') 
-nnoremap <expr> <leader>a ':Ack ' . expand("<cword>") 
-
 " double tap , to go back through search
 nnoremap <leader>; ,
 " make current window bigger
@@ -519,7 +515,7 @@ augroup ft_php
   au!
   " au FileType php setlocal foldnestmax=1
   " au FileType php setlocal foldmethod=indent
-  " au BufWrite *.php :Autoformat
+  au BufWrite *.php :Autoformat
 augroup END
 
 " }}}
@@ -529,7 +525,8 @@ augroup ft_javascript
   au BufWrite *.js :Autoformat
 augroup END
 
-" let g:formatprg_args_javascript="--indent-size 2 --file -"
+let g:formatprg_javascript="js-beautify"
+let g:formatprg_args_javascript="--indent-size 2 --file -"
 
 
 " }}}
@@ -575,9 +572,15 @@ augroup END
 " indent classes, switches, namespaces
 " pad operators, parenthesis
 " keep one line statements
-" !!!!! this isn't working right I think. Try changing indent-spaces
-let g:formatdef_my_custom_c = '"astyle --indent=spaces=2 --style=attach --indent-classes --indent-switches --indent-namespaces --pad-oper --pad-paren --keep-one-line-statements"'
+" let g:formatprg_c="astyle"
+" let g:formatprg_h="astyle"
+" let s:astyle_format="--indent=spaces=2 --style=attach --indent-classes --indent-switches --indent-namespaces --pad-oper --pad-paren --keep-one-line-statements"
+" let g:formatprg_args_c=s:astyle_format
+" let g:formatprg_args_h=s:astyle_format
+
+let g:formatdef_my_custom_c ='"astyle --indent=spaces=2 --style=attach --indent-classes --indent-switches --indent-namespaces --pad-oper --pad-paren --keep-one-line-statements"'
 let g:formatters_c = ['my_custom_c']
+let g:formatters_h = ['my_custom_h']
 let g:autoformat_verbosemode = 1
 
 " }}}
@@ -607,7 +610,7 @@ augroup END
 augroup ft_html
   au!
   au FileType html setlocal spell spelllang=en_us
-  " au BufWrite *.html :Autoformat
+  au BufWrite *.html :Autoformat
 augroup END
 "
 " }}}
@@ -662,7 +665,7 @@ let NERDChristmasTree = 1
 let NERDTreeShowHidden = 1
 " }}}
 "   Yankstank {{{
-let g:yankstack_map_keys = 0
+   let g:yankstack_map_keys = 0
 " }}}
 "   slimv {{{
 
@@ -799,56 +802,56 @@ let g:ConqueGdb_Leader = ',,'
 let g:signify_vcs_list = [ 'hg', 'git' ]
 "   }}}
 "   EasyTags {{{
-" ./ means the path of the current file
-" the ; at the end means it will upward search to the root directory
-set tags=./tags;
-" Dynamic files means that easytags writes to the project specific tags
-let g:easytags_dynamic_files = 1
-" when it's sync, it's too slow!
-let g:easytags_async = 1
-let g:easytags_events = ['BufWritePost']
+      " ./ means the path of the current file
+      " the ; at the end means it will upward search to the root directory
+      set tags=./tags;
+      " Dynamic files means that easytags writes to the project specific tags
+      let g:easytags_dynamic_files = 1
+      " when it's sync, it's too slow!
+      let g:easytags_async = 1
+      let g:easytags_events = ['BufWritePost']
 " }}}
 "   Vdebug {{{
-let g:vdebug_keymap = {
-      \    "step_into" : "<F1>",
-      \    "step_over" : "<F2>",
-      \    "step_out" : "<F4>",
-      \    "run" : "<F5>",
-      \    "run_to_cursor" : "shift-<F5>",
-      \    "close" : "<F6>",
-      \    "detach" : "<F8>",
-      \    "set_breakpoint" : "<F10>",
-      \    "get_context" : "<F11>",
-      \    "eval_under_cursor" : "<F12>",
-      \    "eval_visual" : "<Leader>e",
-      \}
+  let g:vdebug_keymap = {
+    \    "step_into" : "<F1>",
+    \    "step_over" : "<F2>",
+    \    "step_out" : "<F4>",
+    \    "run" : "<F5>",
+    \    "run_to_cursor" : "shift-<F5>",
+    \    "close" : "<F6>",
+    \    "detach" : "<F8>",
+    \    "set_breakpoint" : "<F10>",
+    \    "get_context" : "<F11>",
+    \    "eval_under_cursor" : "<F12>",
+    \    "eval_visual" : "<Leader>e",
+    \}
 
-let g:vdebug_options= {
-      \    "continuous_mode" : 1,
-      \    "port" : 9000,
-      \    "server" : 'localhost',
-      \    "timeout" : 60,
-      \    "on_close" : 'detach',
-      \    "break_on_open" : 0,
-      \    "ide_key" : '',
-      \    "path_maps" : {},
-      \    "debug_window_level" : 0,
-      \    "debug_file_level" : 0,
-      \    "debug_file" : "",
-      \    "watch_window_style" : 'expanded',
-      \    "marker_default" : '⬦',
-      \    "marker_closed_tree" : '▸',
-      \    "marker_open_tree" : '▾'
-      \}
+    let g:vdebug_options= {
+    \    "continuous_mode" : 1,
+    \    "port" : 9000,
+    \    "server" : 'localhost',
+    \    "timeout" : 60,
+    \    "on_close" : 'detach',
+    \    "break_on_open" : 0,
+    \    "ide_key" : '',
+    \    "path_maps" : {},
+    \    "debug_window_level" : 0,
+    \    "debug_file_level" : 0,
+    \    "debug_file" : "",
+    \    "watch_window_style" : 'expanded',
+    \    "marker_default" : '⬦',
+    \    "marker_closed_tree" : '▸',
+    \    "marker_open_tree" : '▾'
+    \}
 "   }}}
 "   Easymotion {{{
-" let g:EasyMotion_do_mapping = 0 "Disable default mappings
-" let g:EasyMotion_smartcase = 1
-" there's also <leader>j and <leader>k bindings
+  " let g:EasyMotion_do_mapping = 0 "Disable default mappings
+  " let g:EasyMotion_smartcase = 1
+  " there's also <leader>j and <leader>k bindings
 " }}}
 "   Yankstack {{{
 "don't let yankstack add mappings by default. It screws with easymotion
-let g:yankstack_map_keys = 0
+   let g:yankstack_map_keys = 0
 " }}}
 "   ExpandRegion {{{
 vmap v <Plug>(expand_region_expand)
