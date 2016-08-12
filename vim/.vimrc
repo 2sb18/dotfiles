@@ -256,8 +256,8 @@ set undoreload=10000
 set gdefault
 " tame searching/moving
 " magic regexs, so they are like normal
-" nnoremap / /\v
-" vnoremap / /\v
+nnoremap / /\v
+vnoremap / /\v
 set hlsearch
 set ignorecase
 " if any letters are capitalized in a search,
