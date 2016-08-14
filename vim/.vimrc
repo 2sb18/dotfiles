@@ -254,10 +254,7 @@ set undoreload=10000
 
 " search and replace options
 set gdefault
-" tame searching/moving
-" magic regexs, so they are like normal
-nnoremap / /\v
-vnoremap / /\v
+
 set hlsearch
 set ignorecase
 " if any letters are capitalized in a search,
@@ -365,8 +362,6 @@ function! ExecuteMacroOverVisualRange()
   echo "@".getcmdline()
   execute ":'<,'>normal @".nr2char(getchar())
 endfunction
-
-nmap s <Plug>(easymotion-s)
 
 map / <Plug>(incsearch-forward)
 map ? <Plug>(incsearch-backward)
@@ -861,6 +856,9 @@ vmap <C-v> <Plug>(expand_region_shrink)
 let g:ack_default_options =
       \ " -s -H --nocolor --nogroup --column --smart-case --follow --ignore-file=ext:mak,orig,vdx"
 
+"   }}}
+"   incsearch {{{
+let g:incsearch#magic = '\v'
 "   }}}
 " }}}
 " REMAPS -------------------------------------------------- {{{
