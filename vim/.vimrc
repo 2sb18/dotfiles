@@ -37,9 +37,7 @@
 " }}}   
 " things to learn/fix in vim ------------------------------ {{{
 " - install Cscope
-" - Ack!!!!
 " - find a better changelist plugin, one that works across files
-" - cursorline highlighting to easily find where I am
 " }}}
 " OS ------------------------------------------------------ {{{
 
@@ -448,6 +446,8 @@ nnoremap <leader>s :%s/\<<C-r><C-w>\>/
 " bring cursor to word you want to :vim search for and hit <leader>t
 " nnoremap <expr> <leader>t ':vim ' . expand("<cword>") . ' *.' . expand('%:e') . ' **/*.' . expand('%:e') 
 nnoremap <expr> <leader>t ':tag ' . expand("<cword>") 
+
+nnoremap <expr> <leader>a ':Ack ' . expand("<cword>")
 
 if !s:is_windows
   nnoremap <leader>tm :call VimuxRunCommand("clear;")<cr>
