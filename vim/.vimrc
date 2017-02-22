@@ -5,10 +5,10 @@
 " }}}
 " Problems ------------------------------------------------ {{{
 "   - copy and pasting on linux laptop
-"   - easy tag still isn't great
 "   - still don't use greplace very well
 "   :1,$!astyle (called by :Autoformat) an empty c file results in a 0x01 being written
 "   :Autoformat a c file results in crlf being added
+"     - this is still busted in 2.06 it seems, so I still need the RemoveExtraNewlines function below
 "     - seems to be astyle, since it only happens with c files
 "       - does it happen with h files? yes it does
 "     - line always put after the last line filters.
@@ -37,9 +37,7 @@
 " }}}   
 " things to learn/fix in vim ------------------------------ {{{
 " - install Cscope
-" - Ack!!!!
 " - find a better changelist plugin, one that works across files
-" - cursorline highlighting to easily find where I am
 " }}}
 " OS ------------------------------------------------------ {{{
 
@@ -115,6 +113,7 @@ Plugin 'godlygeek/csapprox'
 Plugin 'haya14busa/incsearch.vim'
 
 " fast search with awk!
+" to get this working try http://stackoverflow.com/questions/1023710/how-can-i-install-and-use-ack-library-on-windows
 Plugin 'mileszs/ack.vim'
 
 " snipmate stuff 
@@ -126,7 +125,8 @@ Plugin 'garbas/vim-snipmate'
 "snipmate doesn't ship with snippets, so these are some snippets
 Plugin 'honza/vim-snippets'     
 
-" vim-misc is needed for easytags
+" vim-misc and vim-shell are needed for easytags
+Plugin 'xolox/vim-shell'
 Plugin 'xolox/vim-misc'
 Plugin 'xolox/vim-easytags'
 
@@ -448,6 +448,8 @@ nnoremap <leader>s :%s/\<<C-r><C-w>\>/
 " nnoremap <expr> <leader>t ':vim ' . expand("<cword>") . ' *.' . expand('%:e') . ' **/*.' . expand('%:e') 
 nnoremap <expr> <leader>t ':tag ' . expand("<cword>") 
 
+nnoremap <expr> <leader>a ':Ack ' . expand("<cword>")
+
 if !s:is_windows
   nnoremap <leader>tm :call VimuxRunCommand("clear;")<cr>
 endif
@@ -554,6 +556,9 @@ augroup ft_c
   au BufWrite *.c :Autoformat
   au BufWrite *.c :RemoveExtraNewlines
   au BufWrite *.c :Errors
+  " when we open .h files we want them to be treated as C files
+  au BufRead,BufNewFile *.h set filetype=c
+
   au BufWrite *.h :Autoformat
   au BufWrite *.h :RemoveExtraNewlines
   au BufWrite *.h :Errors
@@ -563,17 +568,6 @@ augroup ft_c
   call tcomment#DefineType('h', '// %s')
 
 augroup END
-
-" indent 2 spaces
-" attach brackets style
-" indent classes, switches, namespaces
-" pad operators, parenthesis
-" keep one line statements
-" let g:formatprg_c="astyle"
-" let g:formatprg_h="astyle"
-" let s:astyle_format="--indent=spaces=2 --style=attach --indent-classes --indent-switches --indent-namespaces --pad-oper --pad-paren --keep-one-line-statements"
-" let g:formatprg_args_c=s:astyle_format
-" let g:formatprg_args_h=s:astyle_format
 
 let g:formatdef_my_custom_c ='"astyle --indent=spaces=2 --style=attach --indent-classes --indent-switches --indent-namespaces --pad-oper --pad-paren --keep-one-line-statements"'
 let g:formatters_c = ['my_custom_c']
