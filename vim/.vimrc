@@ -109,7 +109,8 @@ Plugin 'kien/ctrlp.vim'
 Plugin 'godlygeek/csapprox'
 
 " show changes to the file since last commit
-Plugin 'mhinz/vim-signify'
+" THIS SHIT IS TOO SLOW I THINK
+" Plugin 'mhinz/vim-signify'
 
 Plugin 'haya14busa/incsearch.vim'
 
@@ -510,7 +511,8 @@ augroup ft_php
   au!
   " au FileType php setlocal foldnestmax=1
   " au FileType php setlocal foldmethod=indent
-  au BufWrite *.php :Autoformat
+  " making it silent cause Autoformat bitches that it can't find anything
+  au BufWrite *.php :silent! Autoformat
 augroup END
 
 " }}}
@@ -605,7 +607,7 @@ augroup END
 augroup ft_html
   au!
   au FileType html setlocal spell spelllang=en_us
-  au BufWrite *.html :Autoformat
+  " au BufWrite *.html :Autoformat
 augroup END
 "
 " }}}
