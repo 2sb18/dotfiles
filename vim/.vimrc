@@ -113,8 +113,15 @@ Plugin 'godlygeek/csapprox'
 Plugin 'haya14busa/incsearch.vim'
 
 " fast search with awk!
+" NOTE!!! Since we're using ag now we don't need ack installed !!!
 " to get this working try http://stackoverflow.com/questions/1023710/how-can-i-install-and-use-ack-library-on-windows
 Plugin 'mileszs/ack.vim'
+
+" going to try the silver searcher instead of ack
+" to install ag I had luck on my work computer with installing MinGW and
+" installing chocolatey from that. Check out " https://github.com/ggreer/the_silver_searcher/wiki/Windows 
+
+
 
 " snipmate stuff 
 "snipmate depends on this
@@ -515,6 +522,9 @@ augroup ft_php
   " au FileType php setlocal foldmethod=indent
   " making it silent cause Autoformat bitches that it can't find anything
   au BufWrite *.php :silent! Autoformat
+
+  au BufRead,BufNewFile *.php let g:ag_option = '--php'
+
 augroup END
 
 " }}}
@@ -563,9 +573,13 @@ augroup ft_c
   au BufWrite *.h :RemoveExtraNewlines
   au BufWrite *.h :Errors
 
+  au BufRead,BufNewFile *.c let g:ackprg = 'ag --nogroup --nocolor --column --cc'
+  au BufRead,BufNewFile *.h let g:ackprg = 'ag --nogroup --nocolor --column --cc'
+
   " I want // comments instead of /* */ comments!
   call tcomment#DefineType('c', '// %s')
   call tcomment#DefineType('h', '// %s')
+
 
 augroup END
 
@@ -849,9 +863,6 @@ vmap v <Plug>(expand_region_expand)
 vmap <C-v> <Plug>(expand_region_shrink)
 " }}}
 "   Ack {{{
-let g:ack_default_options =
-      \ " -s -H --nocolor --nogroup --column --smart-case --follow --ignore-file=ext:mak,orig,vdx"
-
 "   }}}
 "   incsearch {{{
 let g:incsearch#magic = '\v'
@@ -859,7 +870,6 @@ let g:incsearch#magic = '\v'
 " }}}
 " REMAPS -------------------------------------------------- {{{
 
-" function defines new function
 " ! silently replaces other function
 " s: is for functions that are local to a script, whatever that means
 function! s:DiffWithSaved()
