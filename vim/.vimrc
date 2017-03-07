@@ -169,7 +169,8 @@ endif
 if !s:is_windows && system("uname -a | grep raspberrypi") != ""
   colorscheme jellybeans
 else
-  colorscheme molokai
+  colorscheme badwolf
+  " colorscheme molokai
   " colorscheme mustang
   " colorscheme jellybeans
 endif
@@ -579,7 +580,6 @@ augroup ft_c
   " I want // comments instead of /* */ comments!
   call tcomment#DefineType('c', '// %s')
   call tcomment#DefineType('h', '// %s')
-
 
 augroup END
 
