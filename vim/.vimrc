@@ -107,7 +107,8 @@ Plugin 'kien/ctrlp.vim'
 Plugin 'godlygeek/csapprox'
 
 " show changes to the file since last commit
-Plugin 'mhinz/vim-signify'
+" too slow I think
+" Plugin 'mhinz/vim-signify'
 
 Plugin 'haya14busa/incsearch.vim'
 
@@ -128,6 +129,9 @@ Plugin 'honza/vim-snippets'
 Plugin 'xolox/vim-shell'
 Plugin 'xolox/vim-misc'
 Plugin 'xolox/vim-easytags'
+
+" disapprove of deep indentation. It's funny!
+" Plugin 'dodie/vim-disapprove-deep-indentation'
 
 
 " always changing directory to browswerlink
@@ -161,7 +165,8 @@ endif
 if !s:is_windows && system("uname -a | grep raspberrypi") != ""
   colorscheme jellybeans
 else
-  colorscheme molokai
+  colorscheme badwolf
+  " colorscheme molokai
   " colorscheme mustang
   " colorscheme jellybeans
 endif
@@ -512,7 +517,9 @@ augroup ft_php
   au!
   " au FileType php setlocal foldnestmax=1
   " au FileType php setlocal foldmethod=indent
-  au BufWrite *.php :Autoformat
+
+  " don't try to Autoformat, instead use php-indenting-for-vim
+  " au BufWrite *.php :Autoformat
 augroup END
 
 " }}}
