@@ -133,9 +133,10 @@ Plugin 'garbas/vim-snipmate'
 Plugin 'honza/vim-snippets'     
 
 " vim-misc and vim-shell are needed for easytags
-Plugin 'xolox/vim-shell'
-Plugin 'xolox/vim-misc'
-Plugin 'xolox/vim-easytags'
+" easytags just isn't working properly
+" Plugin 'xolox/vim-shell'
+" Plugin 'xolox/vim-misc'
+" Plugin 'xolox/vim-easytags'
 
 
 " always changing directory to browswerlink
@@ -813,9 +814,10 @@ let g:signify_vcs_list = [ 'hg', 'git' ]
       " Dynamic files means that easytags writes to the project specific tags
       let g:easytags_dynamic_files = 1
       " when it's sync, it's too slow!
+      " but when async, it's not working correctly on my work computer, it overwrites the tags files instead of updating it.
       let g:easytags_async = 1
-      let g:easytags_events = ['BufWritePost']
-" }}}
+"       let g:easytags_events = ['BufWritePost']
+" " }}}
 "   Vdebug {{{
   let g:vdebug_keymap = {
     \    "step_into" : "<F1>",
